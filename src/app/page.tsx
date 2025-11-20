@@ -1,16 +1,16 @@
-import { ModeToggle } from '@/components/dark-mode/ModeToggle';
 import { Button } from '@/components/ui/button';
+import { Home } from 'lucide-react';
 import Link from 'next/link';
 
 const page = () => {
   return (
     <div>
-      <ModeToggle></ModeToggle>
-      
+     
       Landing page
-
       <Link href="/dashboard">
-        <Button>Dashboard</Button>
+        <Button>
+          Dashboard <Home />
+        </Button>
       </Link>
     </div>
   );
