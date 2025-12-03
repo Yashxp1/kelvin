@@ -14,7 +14,7 @@ export function ModeToggle() {
   };
 
   return (
-    <Button variant="ghost" onClick={handleToggle}>
+    <Button className="rounded-full" variant="ghost" onClick={handleToggle}>
       {theme === 'dark' ? (
         <Sun strokeWidth="1.5" />
       ) : (
