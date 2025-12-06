@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import authconfig from './lib/authconfig';
+import authconfig from './lib/auth/authconfig';
 
 import { NextResponse } from 'next/server';
 import { authRoute, privateRoute } from './route';
