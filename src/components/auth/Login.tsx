@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -11,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-import { FaGoogle } from 'react-icons/fa';
+import SignInButton from '../SignIn';
 
 const Login = () => {
   return (
@@ -54,10 +53,7 @@ const Login = () => {
           Login
         </Button>
 
-        <Button className="w-full py-3 text-xs">
-          <FaGoogle /> Login with Google
-        </Button>
-
+        <SignInButton />
         <div className="flex items-center justify-center gap-2 py-2 w-full">
           <div className="flex-1 justify-center items-center border w-full" />
         </div>

@@ -1,6 +1,7 @@
 'use client';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { Button } from './ui/button';
+import { FaGoogle } from 'react-icons/fa';
 
 export default function SignInButton() {
   const { data: session } = useSession();
@@ -12,8 +13,11 @@ export default function SignInButton() {
     );
   }
   return (
-    <Button onClick={() => signIn('google', { callbackUrl: '/dashboard' })}>
-      Sign in with Google
+    <Button
+      className="w-full py-3 text-xs"
+      onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+    >
+      <FaGoogle /> Login with Google
     </Button>
   );
 }
