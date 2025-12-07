@@ -1,9 +1,6 @@
 'use client';
 
 import SignInButton from '@/components/SignIn';
-import { Button } from '@/components/ui/button';
-import { signIn } from '@/lib/auth';
-import React from 'react';
 
 const page = () => {
   return (
