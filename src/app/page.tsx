@@ -1,14 +1,14 @@
 'use client';
 
 import SignInButton from '@/components/SignIn';
+import Link from 'next/link';
 
 const page = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-blue-900">
       <h1>This is the landing page - to be done later!!!!!!!!</h1>
 
-      {/* <Button onClick={() => signIn('google')}>Sign In with Google</Button> */}
-      <SignInButton />
+      <Link href="/dashboard">Dashboard</Link>
     </div>
   );
 };
