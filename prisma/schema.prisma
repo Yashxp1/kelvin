@@ -17,7 +17,6 @@ model User {
   sessions      Session[]
 
   integrations Integration[]
-  workspace    Workspace[]
 
   Authenticator Authenticator[]
 
@@ -79,42 +78,16 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-model Workspace {
-  id   String @id @default(cuid())
-  wsId String @unique
-  name String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-}
-
 model Integration {
-  id       String @id @default(cuid())
-  userId   String
-  provider String
-  wsId     String
+  id     String  @id @default(cuid())
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String?
 
-  access_token  String?
-  refresh_token String?
-  expires_at    Int?
-  token_type    String?
-  scope         String?
-
-  notion_wsId   String?
-  notion_bot_id String?
-
-  github_userId          String?
-  github_username        String?
-  github_installation_id String?
-
-  id_token      String?
-  session_state String?
+  provider     String
+  accessToken  String?
+  refreshToken String?
+  rawData      Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
