@@ -50,7 +50,6 @@ const Page = () => {
     <div className="p-6">
       <h1 className="font-semibold text-2xl mb-6">Integrations</h1>
 
-      {/* Responsive grid: 1 → 2 → 3 columns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {items.map((item) => {
           const isConnected = connected[item.provider];

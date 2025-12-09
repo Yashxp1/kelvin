@@ -19,7 +19,7 @@ const Page = () => {
         <div className="relative  w-full rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
           <textarea
             className="h-24 font-semibold w-full  resize-none bg-transparent text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"
-            placeholder='Plan a new task for Tembo to handle... (use "@" to mention apps or files)'
+            placeholder="Plan a new task..."
           />
 
           <div className="mt-2 flex items-center justify-between">
@@ -29,11 +29,11 @@ const Page = () => {
             </Button>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 border-r border-zinc-200 pr-2 mr-2 dark:border-zinc-700">
+              {/* <div className="flex items-center gap-1 border-r border-zinc-200 pr-2 mr-2 dark:border-zinc-700">
                 <IconButton icon={<Settings2 className="size-4" />} />
                 <IconButton icon={<PanelRight className="size-4" />} />
                 <IconButton icon={<Paperclip className="size-4" />} />
-              </div>
+              </div> */}
 
               <button className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white transition-all hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300">
                 <ArrowRight className="h-4 w-4" />
