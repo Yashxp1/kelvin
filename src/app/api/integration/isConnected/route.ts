@@ -9,7 +9,6 @@ export async function GET() {
     return NextResponse.json({ connected: {} });
   }
 
-  // Get ALL integrations for this user
   const integrations = await prisma.integration.findMany({
     where: {
       userId: session.user.id,
@@ -20,7 +19,6 @@ export async function GET() {
     },
   });
 
-  // Convert to object: { github: true, notion: false, linear: false }
   const connected = {
     github: integrations.some((i) => i.provider === 'github'),
     notion: integrations.some((i) => i.provider === 'notion'),
