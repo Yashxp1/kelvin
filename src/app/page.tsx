@@ -1,6 +1,5 @@
 'use client';
 
-import SignInButton from '@/components/SignIn';
 import Link from 'next/link';
 
 const page = () => {
@@ -13,4 +12,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default page; 
