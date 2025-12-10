@@ -4,7 +4,6 @@ import { Octokit } from 'octokit';
 import { NextRequest } from 'next/server';
 
 const getRepos = async (req: NextRequest, user: { id: string }) => {
-
   const integration = await prisma.integration.findFirst({
     where: {
       userId: user.id,
@@ -21,17 +20,12 @@ const getRepos = async (req: NextRequest, user: { id: string }) => {
   });
 
   const repos = await octokit.rest.repos.listForAuthenticatedUser({
-    per_page: 3,
+    // per_page: 3,
     sort: 'created',
     ref: 'heads/main',
   });
 
-  return repos;
-
-  
+ return repos.data;
 };
 
-
-
 export const GET = withApiHandler(getRepos);
-
