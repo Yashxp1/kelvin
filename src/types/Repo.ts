@@ -9,3 +9,10 @@ interface Repo {
   full_name: string;
   private: boolean;
 }
+
+interface PullRequestResponse {
+  owner: string;
+  repo: string;
+  prompt: string;
+  // filePath: string;
+}

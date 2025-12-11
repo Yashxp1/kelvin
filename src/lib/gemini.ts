@@ -1,5 +1,4 @@
 import { GoogleGenAI } from '@google/genai';
-
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function Gemini(prompt: string) {
@@ -8,10 +7,9 @@ export async function Gemini(prompt: string) {
     contents: prompt,
     config: {
       systemInstruction:
-        'You are an AI developer that prepares pull requests. Given a task, output the exact file changes needed and a clear PR title and description. Do not include reasoning or commentary.',
+        'You prepare complete updated source files for GitHub pull requests. Never output partial code. Never output reasoning.',
+      temperature: 0.2,
     },
   });
-
   return response;
 }
-
