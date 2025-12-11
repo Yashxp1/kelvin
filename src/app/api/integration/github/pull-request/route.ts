@@ -1,54 +1,67 @@
-import { withApiHandler } from '@/lib/apiHandler';
 import { NextRequest } from 'next/server';
 import { Octokit } from 'octokit';
 import prisma from '@/lib/prisma';
 import { Gemini } from '@/lib/gemini';
+import { withApiHandler } from '@/lib/apiHandler';
+
+function extractJson(text: string) {
+  if (!text) return null;
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) return null;
+  try {
+    return JSON.parse(match[0]);
+  } catch {
+    return null;
+  }
+}
 
 const createPR = async (req: NextRequest, user: { id: string }) => {
   const { owner, repo, prompt } = await req.json();
-
-  // const aiRes = Gemini()
-
   if (!owner || !repo || !prompt) {
     throw new Error('Missing field');
   }
-
   const integration = await prisma.integration.findFirst({
     where: {
       userId: user.id,
       provider: 'github',
     },
   });
-
-  if (!integration) {
-    throw new Error('Github not connected');
-  }
-
+  if (!integration) throw new Error('Github not connected');
   const octokit = new Octokit({ auth: integration.accessToken });
+  const aiResponse = await Gemini(`
+You MUST return ONLY valid JSON.
+NO markdown, NO comments, NO explanation, NO backticks.
+Return EXACTLY this shape:
+{
+  "filePath": "path/to/file",
+  "updatedContent": "string content or code",
+  "prTitle": "string",
+  "prBody": "string"
+}
+User prompt: ${prompt}
+`);
 
-  const aiResponse = await Gemini(prompt);
+  const aiRawText = aiResponse.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
-  const aiRawText = aiResponse.candidates?.[0]?.content?.parts?.[0]?.text;
+  const parsed = extractJson(aiRawText);
 
-  if (!aiRawText) {
-    throw new Error('AI returned no text');
-  }
+  // console.log("Ai content : ", parsed)
 
-  const { filePath, updatedContent, prTitle, prBody } = JSON.parse(aiRawText);
+  if (!parsed) throw new Error('AI returned invalid JSON');
+
+  const { filePath, updatedContent, prTitle, prBody } = parsed;
 
   if (!filePath || !updatedContent || !prTitle || !prBody) {
-    throw new Error('AI response is missing required fields');
+    throw new Error('AI response missing required fields');
   }
-
-  const branchName = `ai-change-${Date.now()}`;
-
   const baseRef = await octokit.rest.git.getRef({
     owner,
     repo,
-    ref: 'head/main',
+    ref: 'heads/main',
   });
-
   const baseSha = baseRef.data.object.sha;
+
+  const branchName = `ai-change-${Date.now()}`;
 
   await octokit.rest.git.createRef({
     owner,
@@ -60,7 +73,7 @@ const createPR = async (req: NextRequest, user: { id: string }) => {
   await octokit.rest.repos.createOrUpdateFileContents({
     owner,
     repo,
-    path: filePath,
+    path: filePath || '',
     message: prTitle,
     content: Buffer.from(updatedContent).toString('base64'),
     branch: branchName,
@@ -81,4 +94,28 @@ const createPR = async (req: NextRequest, user: { id: string }) => {
   };
 };
 
+const getPr = async (req: NextRequest, user: { id: string }) => {
+  const integration = await prisma.integration.findFirst({
+    where: {
+      provider: 'github',
+      userId: user.id,
+    },
+  });
+
+  if (!integration) throw new Error('Github not connected');
+
+  const { repo, owner } = await req.json();
+
+  const octokit = new Octokit({ auth: integration.accessToken });
+
+  const { data } = await octokit.rest.pulls.list({
+    owner,
+    repo,
+    state: 'all',
+  });
+
+  return data;
+};
+
 export const POST = withApiHandler(createPR);
+// export const POST = withApiHandler(getPr);
