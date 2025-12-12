@@ -4,6 +4,11 @@ import prisma from '@/lib/prisma';
 import { Gemini } from '@/lib/gemini';
 import { withApiHandler } from '@/lib/apiHandler';
 
+type GithubUsername = {
+  login: string;
+  [key: string]: any;
+};
+
 function extractJson(text: string) {
   if (!text) return null;
   const match = text.match(/\{[\s\S]*\}/);
@@ -27,7 +32,9 @@ const createPR = async (req: NextRequest, user: { id: string }) => {
     },
   });
   if (!integration) throw new Error('Github not connected');
+
   const octokit = new Octokit({ auth: integration.accessToken });
+
   const aiResponse = await Gemini(`
 You MUST return ONLY valid JSON.
 NO markdown, NO comments, NO explanation, NO backticks.
@@ -41,11 +48,10 @@ Return EXACTLY this shape:
 User prompt: ${prompt}
 `);
 
-  const aiRawText = aiResponse.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const aiRawText =
+    aiResponse?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
   const parsed = extractJson(aiRawText);
-
-  // console.log("Ai content : ", parsed)
 
   if (!parsed) throw new Error('AI returned invalid JSON');
 
@@ -108,8 +114,10 @@ const getPr = async (req: NextRequest, user: { id: string }) => {
 
   const octokit = new Octokit({ auth: integration.accessToken });
 
+  const ghUser = integration.rawData as GithubUsername;
+
   const { data } = await octokit.rest.pulls.list({
-    owner,
+    owner: ghUser.login,
     repo,
     state: 'all',
   });
