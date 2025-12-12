@@ -10,6 +10,9 @@ import {
   FileScan,
   GitPullRequestArrow,
   LandPlot,
+  Asterisk,
+  GitMerge,
+  Bug,
 } from 'lucide-react';
 
 import { HiSlash } from 'react-icons/hi2';
@@ -25,8 +28,14 @@ import {
 import { toast } from 'sonner';
 
 import { Spinner } from '@/components/ui/spinner';
-import { useGeneratePR, useGetRepos } from '@/hooks/Github';
+import {
+  useGeneratePR,
+  useGetRepos,
+  useIssue,
+  useSummary,
+} from '@/hooks/Github';
 import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type ActionProps = {
   name: string;
@@ -46,19 +55,31 @@ const actions = [
     name: 'Search repo',
     icon: FileScan,
   },
+  {
+    name: 'Create-issue',
+    icon: Bug,
+  },
 ];
 
 const Page = () => {
   const { data: repos, isLoading, error } = useGetRepos();
   const { mutate: generatePR, isPending } = useGeneratePR();
+  const {
+    mutate: summary,
+    data: summaryData,
+    isPending: isSummaryPending,
+  } = useSummary();
 
   const [currentAction, setCurrentAction] = useState<ActionProps | null>(null);
   const [selectRepo, setSelectRepo] = useState<string | null>(null);
   const [agentPrompt, setagentPrompt] = useState('');
+  const [agentSummary, setAgentSummary] = useState('');
+  const { mutate: issue, isPending: isIssuePending } = useIssue();
 
   const handlePromptInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value;
     setagentPrompt(input);
+    setAgentSummary('');
   };
 
   const handleAgentAction = () => {
@@ -79,6 +100,27 @@ const Page = () => {
 
     if (currentAction.name === 'Pull-request') {
       generatePR({
+        owner: 'Yashxp1',
+        repo: selectRepo,
+        prompt: agentPrompt,
+      });
+    } else if (currentAction.name === 'Review') {
+      summary(
+        {
+          repo: selectRepo,
+          prompt: agentPrompt,
+        },
+        {
+          onSuccess: (data) => {
+            const text =
+              data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+
+            setAgentSummary(text);
+          },
+        }
+      );
+    } else if (currentAction.name === 'Create-issue') {
+      issue({
         owner: 'Yashxp1',
         repo: selectRepo,
         prompt: agentPrompt,
@@ -205,17 +247,44 @@ const Page = () => {
                 onClick={handleAgentAction}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white transition-all hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
               >
-                {isPending ? <Spinner /> : <ArrowRight className="h-4 w-4" />}
+                {isPending || isSummaryPending || isIssuePending ? (
+                  <Spinner />
+                ) : (
+                  <ArrowRight className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full max-w-2xl">
-        {/* <Asgent /> */}
+      <div className="w-full max-w-2xl mx-auto mt-6">
+        {(isSummaryPending || agentSummary) && (
+          <div className="relative bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden p-6">
+            <div className="flex items-center justify-between text-xs gap-2 mb-3">
+              <div className="px-2 gap-0.5 flex justify-center items-center font-semibold bg-zinc-100 dark:bg-zinc-800 py-1 w-fit rounded-full">
+                <Asterisk size={15} className="text-yellow-500" />
+                <p className="">{agentPrompt}</p>
+              </div>
+              <Button className="px-2 text-xs h-6 text-purple-500 hover:text-purple-500 hover:bg-purple-500/20">
+                <GitMerge size={15} />
+                Merge
+              </Button>
+            </div>
 
-        {/* <Summary></Summary> */}
+            {isSummaryPending ? (
+              <div className="space-y-2">
+                <Skeleton className="h-[20px] w-[100% ] rounded-full" />
+                <Skeleton className="h-[20px] w-[50% ] rounded-full" />
+                {/* <Skeleton className="h-[20px] w-[70% ] rounded-full" /> */}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
+                {agentSummary}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
