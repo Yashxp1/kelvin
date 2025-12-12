@@ -19,15 +19,55 @@ export function useGeneratePR() {
 
   return useMutation({
     mutationFn: async (payload: PullRequestResponse) => {
-      return await axios.post('/api/integration/github/pull-request', payload);
+      return await axios.post(`${baseUrl}/pull-request`, payload);
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['generate-pr'] });
-      toast.success("Pull request created successfully!");
+      toast.success('Pull request created successfully!');
     },
     onError: (error) => {
-      console.log(error)
-      toast.error( "Failed to create PR");
+      console.log(error);
+      toast.error('Failed to create PR');
+    },
+  });
+}
+
+export function useSummary() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: PullRequestResponse) => {
+      const res = await axios.post(`${baseUrl}/summary`, payload);
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['summary'] });
+      toast.success('Summary generated successfully!');
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error('Failed to generate summary');
+    },
+  });
+}
+
+export function useIssue() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: IssuePayload) => {
+      const res = await axios.post(`${baseUrl}/issues`, payload);
+
+      console.log('Response: => ', res.data);
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['issue'] });
+      toast.success('Issue created successfully!');
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error('Failed to create issue');
     },
   });
 }

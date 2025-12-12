@@ -11,8 +11,15 @@ interface Repo {
 }
 
 interface PullRequestResponse {
-  owner: string;
+  owner?: string;
   repo: string;
-  prompt: string;
+  pullNumber?: number;
+  prompt?: string;
   // filePath: string;
+}
+
+interface IssuePayload {
+  prompt: string;
+  repo: string;
+  owner: string;
 }
