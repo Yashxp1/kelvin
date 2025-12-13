@@ -60,6 +60,7 @@ User prompt: ${prompt}
   if (!filePath || !updatedContent || !prTitle || !prBody) {
     throw new Error('AI response missing required fields');
   }
+
   const baseRef = await octokit.rest.git.getRef({
     owner,
     repo,

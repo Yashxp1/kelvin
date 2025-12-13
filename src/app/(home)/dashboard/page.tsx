@@ -32,6 +32,7 @@ import {
   useGeneratePR,
   useGetRepos,
   useIssue,
+  useSearchRepo,
   useSummary,
 } from '@/hooks/Github';
 import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
@@ -52,7 +53,7 @@ const actions = [
     icon: GitPullRequestArrow,
   },
   {
-    name: 'Search repo',
+    name: 'Search-repo',
     icon: FileScan,
   },
   {
@@ -63,18 +64,24 @@ const actions = [
 
 const Page = () => {
   const { data: repos, isLoading, error } = useGetRepos();
+
   const { mutate: generatePR, isPending } = useGeneratePR();
+
   const {
     mutate: summary,
     data: summaryData,
     isPending: isSummaryPending,
   } = useSummary();
 
+  const { mutate: issue, isPending: isIssuePending } = useIssue();
+
+  const { mutate: searchRepo, isPending: isSearchPending } = useSearchRepo();
+
   const [currentAction, setCurrentAction] = useState<ActionProps | null>(null);
   const [selectRepo, setSelectRepo] = useState<string | null>(null);
   const [agentPrompt, setagentPrompt] = useState('');
   const [agentSummary, setAgentSummary] = useState('');
-  const { mutate: issue, isPending: isIssuePending } = useIssue();
+  const [agentSearch, setAgentSearch] = useState('');
 
   const handlePromptInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value;
@@ -121,7 +128,11 @@ const Page = () => {
       );
     } else if (currentAction.name === 'Create-issue') {
       issue({
-        owner: 'Yashxp1',
+        repo: selectRepo,
+        prompt: agentPrompt,
+      });
+    } else if (currentAction.name === 'Search-repo') {
+      searchRepo({
         repo: selectRepo,
         prompt: agentPrompt,
       });
@@ -247,7 +258,10 @@ const Page = () => {
                 onClick={handleAgentAction}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white transition-all hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
               >
-                {isPending || isSummaryPending || isIssuePending ? (
+                {isPending ||
+                isSummaryPending ||
+                isIssuePending ||
+                isSearchPending ? (
                   <Spinner />
                 ) : (
                   <ArrowRight className="h-4 w-4" />

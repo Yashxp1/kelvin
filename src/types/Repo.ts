@@ -21,5 +21,12 @@ interface PullRequestResponse {
 interface IssuePayload {
   prompt: string;
   repo: string;
-  owner: string;
+  owner?: string;
+}
+
+interface SearchRepo {
+  owner?: string;
+  repo: string;
+  prompt: string;
+  path?: string;
 }

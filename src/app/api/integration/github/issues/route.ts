@@ -12,7 +12,7 @@ type GithubUsername = {
 const createIssue = async (req: NextRequest, user: { id: string }) => {
   const { prompt, repo, owner } = await req.json();
 
-  if (!prompt || !repo || !owner) {
+  if (!prompt || !repo) {
     throw new Error('Missing required fields');
   }
 
@@ -43,24 +43,18 @@ const createIssue = async (req: NextRequest, user: { id: string }) => {
     Repo: "${owner}/${repo}"
   `)) ?? '';
 
-  // console.log('aiResponse => ', aiResponse);
-
   const jsonText = aiResponse?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-
-  console.log('jsonText => ', jsonText);
 
   const cleaned = jsonText.trim().replace(/```json|```/g, '');
 
   const issueData = JSON.parse(cleaned);
 
   const issue = await octokit.request('POST /repos/{owner}/{repo}/issues', {
-    owner,
+    owner: ghUser.login,
     repo,
     title: issueData.title,
     body: issueData.body,
   });
-
-  // console.log('issue => ', issue);
 
   return issue;
 };
