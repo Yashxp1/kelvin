@@ -14,7 +14,7 @@ export async function Gemini(prompt: string) {
     });
     return response;
   } catch (error) {
-    console.error('Error in Gemini:');
+    console.error('Error in Gemini:', error);
     return null;
   }
 }
