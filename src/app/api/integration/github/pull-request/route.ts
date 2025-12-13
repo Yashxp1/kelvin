@@ -60,7 +60,6 @@ User prompt: ${prompt}
   if (!filePath || !updatedContent || !prTitle || !prBody) {
     throw new Error('AI response missing required fields');
   }
-
   const baseRef = await octokit.rest.git.getRef({
     owner,
     repo,
@@ -101,30 +100,4 @@ User prompt: ${prompt}
   };
 };
 
-const getPr = async (req: NextRequest, user: { id: string }) => {
-  const integration = await prisma.integration.findFirst({
-    where: {
-      provider: 'github',
-      userId: user.id,
-    },
-  });
-
-  if (!integration) throw new Error('Github not connected');
-
-  const { repo, owner } = await req.json();
-
-  const octokit = new Octokit({ auth: integration.accessToken });
-
-  const ghUser = integration.rawData as GithubUsername;
-
-  const { data } = await octokit.rest.pulls.list({
-    owner: ghUser.login,
-    repo,
-    state: 'all',
-  });
-
-  return data;
-};
-
 export const POST = withApiHandler(createPR);
-// export const POST = withApiHandler(getPr);
