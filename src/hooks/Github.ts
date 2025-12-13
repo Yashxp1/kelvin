@@ -58,7 +58,6 @@ export function useIssue() {
     mutationFn: async (payload: IssuePayload) => {
       const res = await axios.post(`${baseUrl}/issues`, payload);
 
-      console.log('Response: => ', res.data);
       return res.data;
     },
     onSuccess: () => {
@@ -68,6 +67,25 @@ export function useIssue() {
     onError: (error) => {
       console.log(error);
       toast.error('Failed to create issue');
+    },
+  });
+}
+
+export function useSearchRepo() {
+  const qc = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: SearchRepo) => {
+      const res = await axios.post(`${baseUrl}/search`, payload);
+      return res.data;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['search-repo'] });
+      toast.success('Repo searched successfully!');
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error('Failed to search repo');
     },
   });
 }
