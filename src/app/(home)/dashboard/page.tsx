@@ -1,32 +1,28 @@
 'use client';
+
 import React, { useState } from 'react';
 import {
   ArrowRight,
   Plug,
-  Plus,
   ArrowUpRight,
   X,
-  Bot,
-  FileScan,
-  GitPullRequestArrow,
-  LandPlot,
-  Asterisk,
   GitMerge,
-  Bug,
+  PlusIcon,
+  ChevronDown,
+  Command,
+  Sparkles,
+  Terminal,
 } from 'lucide-react';
 
-import { HiSlash } from 'react-icons/hi2';
 import { Button } from '@/components/ui/button';
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
 import { toast } from 'sonner';
-
 import { Spinner } from '@/components/ui/spinner';
 import {
   useGeneratePR,
@@ -35,53 +31,26 @@ import {
   useSearchRepo,
   useSummary,
 } from '@/hooks/Github';
-import { DropdownMenuLabel } from '@radix-ui/react-dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
+import { GithubActions, NotionActions, apps } from '@/app/api/utils/items';
 
 type ActionProps = {
   name: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
 };
 
-const actions = [
-  {
-    name: 'Review',
-    icon: LandPlot,
-  },
-  {
-    name: 'Pull-request',
-    icon: GitPullRequestArrow,
-  },
-  {
-    name: 'Search-repo',
-    icon: FileScan,
-  },
-  {
-    name: 'Create-issue',
-    icon: Bug,
-  },
-];
-
 const Page = () => {
   const { data: repos, isLoading, error } = useGetRepos();
-
   const { mutate: generatePR, isPending } = useGeneratePR();
-
-  const {
-    mutate: summary,
-    data: summaryData,
-    isPending: isSummaryPending,
-  } = useSummary();
-
+  const { mutate: summary, isPending: isSummaryPending } = useSummary();
   const { mutate: issue, isPending: isIssuePending } = useIssue();
-
   const { mutate: searchRepo, isPending: isSearchPending } = useSearchRepo();
 
   const [currentAction, setCurrentAction] = useState<ActionProps | null>(null);
+  const [currentApp, setCurrentApp] = useState<ActionProps | null>(null);
   const [selectRepo, setSelectRepo] = useState<string | null>(null);
   const [agentPrompt, setagentPrompt] = useState('');
   const [agentSummary, setAgentSummary] = useState('');
-  const [agentSearch, setAgentSearch] = useState('');
 
   const handlePromptInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value;
@@ -89,17 +58,23 @@ const Page = () => {
     setAgentSummary('');
   };
 
+  const handleCurrentApp = () => {
+    if (!currentApp) {
+      toast.error('Select an app');
+      return;
+    }
+    setCurrentApp(currentApp);
+  };
+
   const handleAgentAction = () => {
     if (!selectRepo) {
       toast.error('Select a repository');
       return;
     }
-
     if (!agentPrompt.trim()) {
       toast.error('Prompt cannot be empty');
       return;
     }
-
     if (!currentAction) {
       toast.error('Select an action');
       return;
@@ -121,7 +96,6 @@ const Page = () => {
           onSuccess: (data) => {
             const text =
               data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-
             setAgentSummary(text);
           },
         }
@@ -151,152 +125,234 @@ const Page = () => {
     setSelectRepo(null);
   };
 
-  if (error) return <p>An error occured</p>;
+  if (error)
+    return (
+      <div className="flex h-screen items-center justify-center text-zinc-500">
+        An error occurred loading the dashboard.
+      </div>
+    );
+
+  const isLoadingAction =
+    isPending || isSummaryPending || isIssuePending || isSearchPending;
 
   return (
-    <div className="flex w-full flex-col items-center justify-center p-8 transition-colors">
-      <div className="w-full max-w-2xl space-y-2">
-        <div className="relative w-full rounded-xl border-3 border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <textarea
-            value={agentPrompt}
-            onChange={handlePromptInput}
-            className="h-24 w-full resize-none bg-transparent text-sm font-semibold text-zinc-900 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"
-            placeholder="Plan a new task..."
-          />
+    <div className="w-full  text-zinc-900 dark:text-zinc-100 flex flex-col items-center pt-24 pb-10 px-4">
+      <div
+        className="fixed inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05]"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle, currentColor 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+        }}
+      ></div>
 
-          <div className="mt-2 flex items-center justify-between">
-            <div className="relative">
+      <div className="w-full max-w-3xl z-10 space-y-8">
+        <div className="flex flex-col items-center space-y-2 text-center mb-8">
+          <h1 className="text-5xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+            Kelvin.
+          </h1>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Automate your workflow. Select a target, choose an action, and
+            execute.
+          </p>
+        </div>
+
+        <div className="group relative rounded-2xl border border-zinc-200 bg-white shadow-sm transition-all focus-within:shadow-md focus-within:ring-1 focus-within:ring-zinc-950 dark:border-zinc-800 dark:bg-zinc-900 dark:focus-within:ring-zinc-700 shadow-lg ">
+          <div className="p-4">
+            <textarea
+              value={agentPrompt}
+              onChange={handlePromptInput}
+              className="min-h-[120px] w-full resize-none bg-transparent text-base leading-relaxed placeholder:text-zinc-400 focus:outline-none dark:placeholder:text-zinc-600"
+              placeholder="Describe the task for the agent..."
+              autoFocus
+            />
+          </div>
+
+          <div className="flex items-center justify-between border-t border-zinc-100 bg-zinc-50/50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-900/50 rounded-b-2xl">
+            <div className="flex items-center gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button className="rounded-full text-xs font-normal">
-                    <Plug size={16} />
-                    <span>
-                      {selectRepo !== null ? selectRepo : 'Connect repo'}
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                {selectRepo !== null && (
-                  <button
-                    onClick={handleUnselect}
-                    className=" mx-1 hover:dark:bg-zinc-700 hover:bg-zinc-200 bg-zinc-100 transition-all duration-200 dark:bg-zinc-800  rounded-full p-1 border"
-                  >
-                    <X size={15} />
+                  <button className="flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-700 dark:hover:bg-zinc-700/80">
+                    {currentApp ? (
+                      <>
+                        <currentApp.icon size={14} className="text-zinc-500" />
+                        <span>{currentApp.name}</span>
+                      </>
+                    ) : (
+                      <>
+                        <PlusIcon size={14} className="text-zinc-400" />
+                        <span>Select App</span>
+                      </>
+                    )}
+                    <ChevronDown size={12} className="ml-1 opacity-50" />
                   </button>
-                )}
-                <DropdownMenuContent align="start" className="w-56">
-                  {isLoading ? (
-                    <div className="flex items-center justify-center px-3 py-2">
-                      <Spinner />
-                    </div>
-                  ) : repos?.data && repos.data.length > 0 ? (
-                    <>
-                      {repos.data.map((repo) => (
-                        <DropdownMenuItem
-                          key={repo.id}
-                          onClick={() => handleSelect(repo.name)}
-                          className="flex cursor-pointer items-center justify-between text-xs"
-                        >
-                          <span className="truncate">{repo.name}</span>
-                          <ArrowUpRight
-                            size={14}
-                            className="ml-2 shrink-0 opacity-50"
-                          />
-                        </DropdownMenuItem>
-                      ))}
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem className="cursor-pointer text-xs">
-                        <Plus size={14} className="mr-1" /> More
-                      </DropdownMenuItem>
-                    </>
-                  ) : (
-                    <div className="px-3 py-2 text-xs text-zinc-500">
-                      No repositories found
-                    </div>
-                  )}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  <DropdownMenuLabel className="text-xs text-zinc-500 font-normal">
+                    Integration
+                  </DropdownMenuLabel>
+                  {apps.map((app, idx) => (
+                    <DropdownMenuItem
+                      onClick={() => setCurrentApp(app)}
+                      key={idx}
+                      className="gap-2 text-xs py-2 cursor-pointer"
+                    >
+                      <app.icon size={14} className="text-zinc-500" />
+                      {app.name}
+                    </DropdownMenuItem>
+                  ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+
+              {currentApp && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-sm ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-700 dark:hover:bg-zinc-700/80 max-w-[200px]">
+                      <Plug size={14} className="text-zinc-500" />
+                      <span className="truncate">
+                        {selectRepo || 'Select Repository'}
+                      </span>
+                      {selectRepo && (
+                        <div
+                          role="button"
+                          onClick={handleUnselect}
+                          className="ml-1 rounded-full p-0.5 hover:bg-zinc-200 dark:hover:bg-zinc-600"
+                        >
+                          <X size={12} />
+                        </div>
+                      )}
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-64">
+                    <DropdownMenuLabel className="text-xs text-zinc-500 font-normal">
+                      Target Repository
+                    </DropdownMenuLabel>
+                    {isLoading ? (
+                      <div className="flex justify-center p-4">
+                        <Spinner />
+                      </div>
+                    ) : repos?.data && repos.data.length > 0 ? (
+                      <>
+                        {repos.data.map((repo) => (
+                          <DropdownMenuItem
+                            key={repo.id}
+                            onClick={() => handleSelect(repo.name)}
+                            className="flex justify-between gap-2 text-xs py-2 cursor-pointer"
+                          >
+                            <span className="truncate">{repo.name}</span>
+                            <ArrowUpRight size={12} className="text-zinc-400" />
+                          </DropdownMenuItem>
+                        ))}
+                      </>
+                    ) : (
+                      <div className="p-3 text-xs text-zinc-500">
+                        No repositories found
+                      </div>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
 
-            <div className="flex items-center gap-2">
-              <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <div className="dark:bg-zinc-800/90 dark:hover:bg-zinc-800/50 bg-zinc-100 hover:bg-zinc-200/30 transition-all duration-300 p-1 rounded-full flex text-xs justify-center items-center border">
-                      {currentAction ? (
-                        <div className=" gap-1 flex text-xs justify-center items-center px-1">
-                          <currentAction.icon className="size-4 " />
-                          {currentAction.name}
-                        </div>
-                      ) : (
-                        <HiSlash className="size-4" />
-                      )}
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel className="flex text-xs gap-1 justify-center items-center">
-                      <Bot size={16} /> Agent actions
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
+            <div className="flex items-center gap-3">
+              <div className="h-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
 
-                    {actions.map((action, idx) => (
+              {currentApp && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 transition-colors dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
+                      {currentAction ? (
+                        <>
+                          <currentAction.icon size={14} />
+                          {currentAction.name}
+                        </>
+                      ) : (
+                        <>
+                          <Terminal size={14} />
+                          <span>Select Action</span>
+                        </>
+                      )}
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuLabel className="text-xs text-zinc-500 font-normal">
+                      Available Actions
+                    </DropdownMenuLabel>
+                    {GithubActions.map((action, idx) => (
                       <DropdownMenuItem
                         onClick={() => setCurrentAction(action)}
                         key={idx}
-                        className="text-xs"
+                        className="gap-2 text-xs py-2 cursor-pointer"
                       >
-                        <action.icon size={10} />
+                        <action.icon size={14} className="text-zinc-500" />
                         {action.name}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div>
-
-              <div className="border-l h-4" />
+              )}
 
               <button
                 onClick={handleAgentAction}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-white transition-all hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+                disabled={isLoadingAction}
+                className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white shadow-sm transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
               >
-                {isPending ||
-                isSummaryPending ||
-                isIssuePending ||
-                isSearchPending ? (
-                  <Spinner />
+                {isLoadingAction ? (
+                  <Spinner className="text-current" />
                 ) : (
-                  <ArrowRight className="h-4 w-4" />
+                  <ArrowRight size={16} />
                 )}
               </button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="w-full max-w-2xl mx-auto mt-6">
         {(isSummaryPending || agentSummary) && (
-          <div className="relative bg-white dark:bg-zinc-900 rounded-xl border border-gray-200 dark:border-zinc-800 shadow-sm overflow-hidden p-6">
-            <div className="flex items-center justify-between text-xs gap-2 mb-3">
-              <div className="px-2 gap-0.5 flex justify-center items-center font-semibold bg-zinc-100 dark:bg-zinc-800 py-1 w-fit rounded-full">
-                <Asterisk size={15} className="text-yellow-500" />
-                <p className="">{agentPrompt}</p>
-              </div>
-              <Button className="px-2 text-xs h-6 text-purple-500 hover:text-purple-500 hover:bg-purple-500/20">
-                <GitMerge size={15} />
-                Merge
-              </Button>
-            </div>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+              <div className="flex items-center justify-between border-b border-zinc-100 bg-zinc-50/50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={14} className="text-purple-500" />
+                  <span className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                    Agent Output
+                  </span>
+                </div>
 
-            {isSummaryPending ? (
-              <div className="space-y-2">
-                <Skeleton className="h-[20px] w-[100% ] rounded-full" />
-                <Skeleton className="h-[20px] w-[50% ] rounded-full" />
-                {/* <Skeleton className="h-[20px] w-[70% ] rounded-full" /> */}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 gap-1.5 rounded-md border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                >
+                  <GitMerge size={12} />
+                  Merge Request
+                </Button>
               </div>
-            ) : (
-              <div className="text-sm text-gray-700 dark:text-zinc-300 leading-relaxed whitespace-pre-wrap">
-                {agentSummary}
+
+              <div className="p-5">
+                <div className="mb-4 flex items-start gap-3 rounded-lg bg-zinc-50 p-3 text-sm text-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400">
+                  <div className="mt-0.5 shrink-0 rounded-full bg-zinc-200 p-1 dark:bg-zinc-700">
+                    <Command size={10} />
+                  </div>
+                  <span className="font-medium italic">"{agentPrompt}"</span>
+                </div>
+
+                {isSummaryPending ? (
+                  <div className="space-y-3 py-2">
+                    <Skeleton className="h-4 w-3/4 rounded-md" />
+                    <Skeleton className="h-4 w-full rounded-md" />
+                    <Skeleton className="h-4 w-5/6 rounded-md" />
+                  </div>
+                ) : (
+                  <div className="prose-sm text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+                    {agentSummary.split('\n').map((line, i) => (
+                      <p key={i} className="mb-2 last:mb-0">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         )}
       </div>
