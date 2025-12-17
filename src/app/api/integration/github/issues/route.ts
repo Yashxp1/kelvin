@@ -1,6 +1,6 @@
-import { withApiHandler } from '@/lib/apiHandler';
-import { Gemini } from '@/lib/gemini';
-import prisma from '@/lib/prisma';
+import { withApiHandler } from '@/lib/api/apiHandler';
+import { Gemini } from '@/lib/api/gemini';
+import prisma from '@/lib/api/prisma';
 import { NextRequest } from 'next/server';
 import { Octokit } from 'octokit';
 

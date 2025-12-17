@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/api/prisma';
 import { auth } from '@/lib/auth/auth';
 
 const clientId = process.env.NOTION_CLIENT_ID!;

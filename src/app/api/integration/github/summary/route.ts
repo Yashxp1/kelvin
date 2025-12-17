@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Gemini } from '@/lib/gemini';
+import { Gemini } from '@/lib/api/gemini';
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/api/prisma';
 
 type GithubUsername = {
   login: string;

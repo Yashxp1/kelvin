@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { Octokit } from 'octokit';
-import prisma from '@/lib/prisma';
-import { Gemini } from '@/lib/gemini';
-import { withApiHandler } from '@/lib/apiHandler';
+import prisma from '@/lib/api/prisma';
+import { Gemini } from '@/lib/api/gemini';
+import { withApiHandler } from '@/lib/api/apiHandler';
 
 type GithubUsername = {
   login: string;

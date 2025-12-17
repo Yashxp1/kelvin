@@ -1,5 +1,5 @@
-import { withApiHandler } from '@/lib/apiHandler';
-import prisma from '@/lib/prisma';
+import { withApiHandler } from '@/lib/api/apiHandler';
+import prisma from '@/lib/api/prisma';
 import { Octokit } from 'octokit';
 import { NextRequest } from 'next/server';
 
@@ -11,9 +11,9 @@ const getRepos = async (req: NextRequest, user: { id: string }) => {
     },
   });
 
-  if (!integration) {
-    throw new Error('Github not connected');
-  }
+  // if (!integration) {
+  //   throw new Error('Github not connected');
+  // }
 
   const octokit = new Octokit({
     auth: integration.accessToken,
@@ -25,7 +25,7 @@ const getRepos = async (req: NextRequest, user: { id: string }) => {
     ref: 'heads/main',
   });
 
- return repos.data;
+  return repos.data;
 };
 
 export const GET = withApiHandler(getRepos);
