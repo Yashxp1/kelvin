@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from './auth/auth';
+import { auth } from '../auth/auth';
 
 type ApiHandlerType<T, P = Record<string, string>> = (
   req: NextRequest,

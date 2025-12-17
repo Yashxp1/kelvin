@@ -8,8 +8,7 @@ export async function Gemini(prompt: string) {
       contents: prompt,
       config: {
         systemInstruction:
-          'You prepare complete updated source files for GitHub pull requests. Never output partial code. Never output reasoning.',
-        temperature: 0.2,
+          'You are a helpful assistant that can answer questions about a given text.',
       },
     });
     return response;
