@@ -48,7 +48,9 @@ const GetPages = ({ selectedPageName, onSelect, onClear }: GetPagesProps) => {
                   key={page.id}
                   onClick={() => onSelect(page.id, title)}
                 >
-                  <span className="truncate">{title}</span>
+                  <span className="truncate">
+                    {title.length > 20 ? title.slice(0, 20) + '...' : title}
+                  </span>
                   <ArrowUpRight size={12} className="text-zinc-400" />
                 </DropdownMenuItem>
               );

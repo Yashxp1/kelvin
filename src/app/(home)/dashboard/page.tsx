@@ -16,6 +16,7 @@ import RepoSelector from './components/RepoSelector';
 import GetPages from './components/GetPages';
 import ActionSelector from './components/ActionSelector';
 import AgentOutput from './components/AgentOutput';
+import { useCreateNotionPage, useNotionSummary } from '@/hooks/notion';
 
 const Page = () => {
   // --- Hooks ---
@@ -23,6 +24,12 @@ const Page = () => {
   const { mutate: summary, isPending: isSummaryPending } = useSummary();
   const { mutate: issue, isPending: isIssuePending } = useIssue();
   const { mutate: searchRepo, isPending: isSearchPending } = useSearchRepo();
+
+  const { mutate: notionPage, isPending: isNotionSummaryPending } =
+    useNotionSummary();
+
+  const { mutate: notionPageCreate, isPending: isNotionPageCreatePending } =
+    useCreateNotionPage();
 
   // --- State ---
   const [currentApp, setCurrentApp] = useState<AppItem | null>(null);
@@ -32,10 +39,16 @@ const Page = () => {
     name: string;
   } | null>(null);
   const [agentPrompt, setAgentPrompt] = useState('');
-  const [agentSummary, setAgentSummary] = useState('');
+  const [repoSummary, setAgentRepoSummary] = useState('');
+  const [notionSummary, setAgentNotionSummary] = useState('');
 
   const isLoadingAction =
-    isPRPending || isSummaryPending || isIssuePending || isSearchPending;
+    isPRPending ||
+    isSummaryPending ||
+    isIssuePending ||
+    isSearchPending ||
+    isNotionSummaryPending ||
+    isNotionPageCreatePending;
 
   // --- Handlers ---
   const handleAgentAction = () => {
@@ -45,7 +58,8 @@ const Page = () => {
     if (!currentAction) return toast.error('Select an action');
     if (!agentPrompt.trim()) return toast.error('Prompt cannot be empty');
 
-    const payload = { repo: selectedTarget.name, prompt: agentPrompt }; // Default payload structure
+    const GithubPayload = { repo: selectedTarget.name, prompt: agentPrompt };
+    // const NotionPayload = { pageId: selectedTarget.id, prompt: agentPrompt };
 
     switch (currentAction.name) {
       case 'Pull-request':
@@ -56,24 +70,37 @@ const Page = () => {
         });
         break;
       case 'Review':
-        summary(payload, {
+        summary(GithubPayload, {
           onSuccess: (data) => {
             const text =
               data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-            setAgentSummary(text);
+            setAgentRepoSummary(text);
           },
         });
         break;
       case 'Create-issue':
-        issue(payload);
+        issue(GithubPayload);
         break;
       case 'Search-repo':
-        searchRepo(payload);
+        searchRepo(GithubPayload);
         break;
       case 'Create-page':
+        notionPageCreate({
+          prompt: agentPrompt,
+        });
+        break;
       case 'Update-page':
       case 'Summarise':
-        alert(currentAction.name); // Placeholder
+        notionPage(
+          { pageId: selectedTarget.id, prompt: agentPrompt },
+          {
+            onSuccess: (data) => {
+              const text =
+                data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+              setAgentNotionSummary(text);
+            },
+          }
+        );
         break;
       default:
         toast.error('Action not recognized');
@@ -103,7 +130,7 @@ const Page = () => {
               value={agentPrompt}
               onChange={(e) => {
                 setAgentPrompt(e.target.value);
-                setAgentSummary('');
+                setAgentRepoSummary('');
               }}
               className="min-h-[120px] w-full resize-none bg-transparent text-base leading-relaxed placeholder:text-zinc-400 focus:outline-none dark:placeholder:text-zinc-600"
               placeholder="Describe the task for the agent..."
@@ -171,8 +198,8 @@ const Page = () => {
 
         <AgentOutput
           prompt={agentPrompt}
-          summary={agentSummary}
-          isPending={isSummaryPending}
+          summary={repoSummary || notionSummary}
+          isPending={isSummaryPending || isNotionSummaryPending}
         />
       </div>
     </div>
