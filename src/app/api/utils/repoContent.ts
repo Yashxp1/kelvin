@@ -1,6 +1,6 @@
 import { Octokit } from 'octokit';
 import { createGithubBranch } from './createBranch';
-import { Gemini } from '@/lib/gemini';
+import { Gemini } from '@/lib/api/gemini';
 
 export async function getRepoContent({
   octokit,
