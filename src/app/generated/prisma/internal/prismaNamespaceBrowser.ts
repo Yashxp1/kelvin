@@ -56,7 +56,8 @@ export const ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Authenticator: 'Authenticator',
-  Integration: 'Integration'
+  Integration: 'Integration',
+  AI_Response: 'AI_Response'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -153,6 +154,20 @@ export const IntegrationScalarFieldEnum = {
 } as const
 
 export type IntegrationScalarFieldEnum = (typeof IntegrationScalarFieldEnum)[keyof typeof IntegrationScalarFieldEnum]
+
+
+export const AI_ResponseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  responseData: 'responseData',
+  prompt: 'prompt',
+  url: 'url',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AI_ResponseScalarFieldEnum = (typeof AI_ResponseScalarFieldEnum)[keyof typeof AI_ResponseScalarFieldEnum]
 
 
 export const SortOrder = {

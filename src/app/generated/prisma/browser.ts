@@ -47,3 +47,8 @@ export type Authenticator = Prisma.AuthenticatorModel
  * 
  */
 export type Integration = Prisma.IntegrationModel
+/**
+ * Model AI_Response
+ * 
+ */
+export type AI_Response = Prisma.AI_ResponseModel

@@ -389,7 +389,8 @@ export const ModelName = {
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Authenticator: 'Authenticator',
-  Integration: 'Integration'
+  Integration: 'Integration',
+  AI_Response: 'AI_Response'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "integration"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "authenticator" | "integration" | "aI_Response"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AI_Response: {
+      payload: Prisma.$AI_ResponsePayload<ExtArgs>
+      fields: Prisma.AI_ResponseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AI_ResponseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AI_ResponseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>
+        }
+        findFirst: {
+          args: Prisma.AI_ResponseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AI_ResponseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>
+        }
+        findMany: {
+          args: Prisma.AI_ResponseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>[]
+        }
+        create: {
+          args: Prisma.AI_ResponseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>
+        }
+        createMany: {
+          args: Prisma.AI_ResponseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AI_ResponseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>[]
+        }
+        delete: {
+          args: Prisma.AI_ResponseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>
+        }
+        update: {
+          args: Prisma.AI_ResponseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>
+        }
+        deleteMany: {
+          args: Prisma.AI_ResponseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AI_ResponseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AI_ResponseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>[]
+        }
+        upsert: {
+          args: Prisma.AI_ResponseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AI_ResponsePayload>
+        }
+        aggregate: {
+          args: Prisma.AI_ResponseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAI_Response>
+        }
+        groupBy: {
+          args: Prisma.AI_ResponseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AI_ResponseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AI_ResponseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AI_ResponseCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -970,6 +1045,20 @@ export const IntegrationScalarFieldEnum = {
 } as const
 
 export type IntegrationScalarFieldEnum = (typeof IntegrationScalarFieldEnum)[keyof typeof IntegrationScalarFieldEnum]
+
+
+export const AI_ResponseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  responseData: 'responseData',
+  prompt: 'prompt',
+  url: 'url',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AI_ResponseScalarFieldEnum = (typeof AI_ResponseScalarFieldEnum)[keyof typeof AI_ResponseScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1179,6 +1268,7 @@ export type GlobalOmitConfig = {
   verificationToken?: Prisma.VerificationTokenOmit
   authenticator?: Prisma.AuthenticatorOmit
   integration?: Prisma.IntegrationOmit
+  aI_Response?: Prisma.AI_ResponseOmit
 }
 
 /* Types for Logging */
