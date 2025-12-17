@@ -33,6 +33,8 @@ const createPR = async (req: NextRequest, user: { id: string }) => {
   });
   if (!integration) throw new Error('Github not connected');
 
+  const ghUser = integration.rawData as { login: string };
+
   const octokit = new Octokit({ auth: integration.accessToken });
 
   const aiResponse = await Gemini(`
@@ -94,9 +96,20 @@ User prompt: ${prompt}
     body: prBody,
   });
 
+  const res = await prisma.ai_response.create({
+    data: {
+      provider: 'github',
+      prompt,
+      responseData: aiResponse?.data,
+      url: `https://github.com/${ghUser.login}/${repo}/pull/${branchName}`,
+      userId: user.id,
+    },
+  });
+
   return {
     url: pr.data.html_url,
     number: pr.data.number,
+    res,
   };
 };
 

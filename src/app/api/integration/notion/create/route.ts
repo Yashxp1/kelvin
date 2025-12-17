@@ -1,6 +1,7 @@
 import { withApiHandler } from '@/app/api/apiHandler';
 import { Gemini } from '@/lib/api/gemini';
 import { getNotionClient } from '@/lib/api/notion';
+import prisma from '@/lib/api/prisma';
 import { NextRequest } from 'next/server';
 
 const createPage = async (req: NextRequest, user: { id: string }) => {
@@ -70,6 +71,15 @@ const createPage = async (req: NextRequest, user: { id: string }) => {
       },
     },
     children: blocks as any,
+  });
+
+  const pageRes = await prisma.ai_response.create({
+    data: {
+      provider: 'notion',
+      prompt,
+      responseData: page as any,
+      userId: user.id,
+    },
   });
 
   return page;

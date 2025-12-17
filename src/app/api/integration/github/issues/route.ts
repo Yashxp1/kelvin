@@ -56,7 +56,17 @@ const createIssue = async (req: NextRequest, user: { id: string }) => {
     body: issueData.body,
   });
 
-  return issue;
+  const issueRes = await prisma.ai_response.create({
+    data: {
+      provider: 'github',
+      prompt,
+      responseData: issue.data as any,
+      url: `https://github.com/${ghUser.login}/${repo}/issues/${issue.data.number}`,
+      userId: user.id,
+    },
+  });
+
+  return issueRes;
 };
 
 export const POST = withApiHandler(createIssue);

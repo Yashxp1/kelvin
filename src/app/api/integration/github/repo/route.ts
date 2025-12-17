@@ -16,7 +16,7 @@ const getRepos = async (req: NextRequest, user: { id: string }) => {
   // }
 
   const octokit = new Octokit({
-    auth: integration.accessToken,
+    auth: integration?.accessToken,
   });
 
   const repos = await octokit.rest.repos.listForAuthenticatedUser({

@@ -2,6 +2,7 @@ import { withApiHandler } from '@/lib/api/apiHandler';
 import { NextRequest } from 'next/server';
 import { getNotionClient } from '@/lib/api/notion';
 import { Gemini } from '@/lib/api/gemini';
+import prisma from '@/lib/api/prisma';
 
 const summary = async (req: NextRequest, user: { id: string }) => {
   const { prompt, pageId } = await req.json();
@@ -69,7 +70,17 @@ const summary = async (req: NextRequest, user: { id: string }) => {
 
   const summary = await Gemini(aiPrompt);
 
-  return summary;
+  const saveSummary = await prisma.ai_response.create({
+    data: {
+      provider: 'notion',
+      prompt,
+      responseData: summary?.data,
+      url: pageUrl,
+      userId: user.id,
+    },
+  });
+
+  return saveSummary;
 };
 
 export const POST = withApiHandler(summary);
