@@ -4,53 +4,72 @@ import { getNotionClient } from '@/lib/api/notion';
 import { Gemini } from '@/lib/api/gemini';
 
 const summary = async (req: NextRequest, user: { id: string }) => {
+  const { prompt, pageId } = await req.json();
+
   const notion = await getNotionClient(user.id);
 
-  const pageData = await notion.search({
-    filter: { property: 'object', value: 'page' },
+  const page = await notion.pages.retrieve({
+    page_id: pageId,
   });
 
-  const res = await Promise.all(
-    pageData.results.map(async (page: any) => {
-      const blocks = await notion.blocks.children.list({
-        block_id: page.id,
-      });
+  const blocks = await notion.blocks.children.list({
+    block_id: pageId,
+  });
 
-      const content = blocks.results
-        .map((block: any) => {
-          const richText = block[block.type]?.rich_text;
-          return richText?.map((t: any) => t.plain_text).join('') || '';
-        })
-        .join('\n');
-
-      return {
-        id: page.id,
-        url: page.url,
-        content: content,
-      };
+  const content = blocks.results
+    .map((block: any) => {
+      const richText = block[block.type]?.rich_text;
+      return richText?.map((t: any) => t.plain_text).join('') || '';
     })
-  );
+    .join('\n');
 
-  const prompt = `
+  const pageUrl =
+    'url' in page ? page.url : `https://notion.so/${pageId.replace(/-/g, '')}`;
+
+  const res = {
+    id: page.id,
+    url: pageUrl,
+    content,
+  };
+
+  const aiPrompt = `
   
-        You are a content summarizer. Your task is to create concise, informative summaries of Notion page content.
+                You are an AI assistant that summarizes Notion page content.
 
-        Given the following Notion page content, provide:
-        1. A brief 1-2 sentence summary of the main topic
-        2. 3-5 key points or takeaways (if applicable)
-        3. Any action items or important dates mentioned (if applicable)
+                Your task is to analyze the page content provided and return a clear, factual summary.
 
-        Keep the summary clear and factual. Don't add information that isn't in the content.
+                Output format (strictly follow this structure):
 
-        Page Content:
-        ${res}
-        Summary:
+                Summary:
+                - concise short sentences describing the main topic of the page.
 
+                Key Points:
+                - 3–5 bullet points highlighting the most important ideas, decisions, or information.
+                - If fewer than 3 points exist, include only what is relevant.
+                - Do not invent or infer details.
+
+                Action Items / Dates:
+                - List any tasks, deadlines, or important dates mentioned.
+                - If none are present, write: "None".
+
+                Rules:
+                - Use only the information present in the page content.
+                - Be neutral and factual.
+                - Do not add opinions, assumptions, or extra context.
+                - Keep the language clear and concise.
+
+                Always refer to the page identifier extracted from the user prompt : ${pageId}
+
+                User Prompt:
+                ${prompt}
+
+                Notion Page Content:
+               ${content}
   `;
 
-  const summary = await Gemini(prompt);
+  const summary = await Gemini(aiPrompt);
 
   return summary;
 };
 
-export const GET = withApiHandler(summary);
+export const POST = withApiHandler(summary);
