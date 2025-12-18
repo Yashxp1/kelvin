@@ -86,7 +86,7 @@ export function useSearchRepo() {
       return res.data;
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['search-repo'] });
+      qc.invalidateQueries({ queryKey: ['update-file'] });
       toast.success('Repo searched successfully!');
     },
     onError: (error) => {

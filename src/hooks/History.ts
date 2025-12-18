@@ -5,7 +5,8 @@ import { IconType } from 'react-icons/lib';
 export type PromptHistoryItem = {
   id: string;
   prompt: string;
-  provider: string
+  url?: string;
+  provider: string;
   icon: IconType;
   createdAt: string;
 };
