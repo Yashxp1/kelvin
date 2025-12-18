@@ -13,6 +13,7 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import PromptHistory from './PromptHistory';
 
 interface AgentOutputProps {
   prompt: string;
@@ -23,14 +24,16 @@ interface AgentOutputProps {
 const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
   const [copied, setCopied] = useState(false);
 
-  if (!isPending && !summary) return null;
-
   const handleCopy = () => {
     navigator.clipboard.writeText(summary);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
     toast.success('Copied to clipboard');
   };
+
+  if (!summary && !isPending) {
+    return <PromptHistory />;
+  }
 
   return (
     <div className="group relative flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white text-sm shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950">

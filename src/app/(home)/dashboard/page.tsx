@@ -17,6 +17,7 @@ import GetPages from './components/GetPages';
 import ActionSelector from './components/ActionSelector';
 import AgentOutput from './components/AgentOutput';
 import { useCreateNotionPage, useNotionSummary } from '@/hooks/notion';
+import PromptHistory from './components/PromptHistory';
 
 const Page = () => {
   const { mutate: generatePR, isPending: isPRPending } = useGeneratePR();
