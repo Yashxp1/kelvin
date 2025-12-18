@@ -19,7 +19,6 @@ import AgentOutput from './components/AgentOutput';
 import { useCreateNotionPage, useNotionSummary } from '@/hooks/notion';
 
 const Page = () => {
-  // --- Hooks ---
   const { mutate: generatePR, isPending: isPRPending } = useGeneratePR();
   const { mutate: summary, isPending: isSummaryPending } = useSummary();
   const { mutate: issue, isPending: isIssuePending } = useIssue();
@@ -31,7 +30,6 @@ const Page = () => {
   const { mutate: notionPageCreate, isPending: isNotionPageCreatePending } =
     useCreateNotionPage();
 
-  // --- State ---
   const [currentApp, setCurrentApp] = useState<AppItem | null>(null);
   const [currentAction, setCurrentAction] = useState<ActionItem | null>(null);
   const [selectedTarget, setSelectedTarget] = useState<{
@@ -50,7 +48,6 @@ const Page = () => {
     isNotionSummaryPending ||
     isNotionPageCreatePending;
 
-  // --- Handlers ---
   const handleAgentAction = () => {
     if (!currentApp) return toast.error('Select an app');
     if (!selectedTarget)
@@ -112,7 +109,6 @@ const Page = () => {
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05] bg-[radial-gradient(circle,currentColor_1px,transparent_1px)] bg-[length:24px_24px]" />
 
       <div className="w-full max-w-3xl z-10 space-y-8">
-        {/* Header */}
         <div className="flex flex-col items-center space-y-2 text-center mb-8">
           <h1 className="text-5xl font-bold tracking-tight text-white dark:text-zinc-50">
             Kelvin.
@@ -123,7 +119,6 @@ const Page = () => {
           </p>
         </div>
 
-        {/* Main Input Box */}
         <div className="group relative rounded-2xl border border-zinc-200 bg-white shadow-lg transition-all dark:border-zinc-800 dark:bg-zinc-900">
           <div className="p-4">
             <textarea
@@ -138,20 +133,16 @@ const Page = () => {
             />
           </div>
 
-          {/* Controls Bar */}
           <div className="flex items-center justify-between border-t border-zinc-100 bg-zinc-50/50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-900/50 rounded-b-2xl">
             <div className="flex items-center gap-2">
-              {/* 1. App Selector */}
               <AppSelector
                 currentApp={currentApp}
                 onSelect={(app) => {
                   setCurrentApp(app);
-                  setSelectedTarget(null); // Reset target when app changes
-                  setCurrentAction(null); // Reset action when app changes
+                  setSelectedTarget(null);
+                  setCurrentAction(null);
                 }}
               />
-
-              {/* 2. Target Selector (Dynamic based on App) */}
               {currentApp?.name === 'Github' ? (
                 <RepoSelector
                   selectedRepo={selectedTarget?.name || null}
@@ -169,7 +160,6 @@ const Page = () => {
               ) : null}
             </div>
 
-            {/* 3. Action Selector & Execute Button */}
             <div className="flex items-center gap-3">
               {currentApp && (
                 <ActionSelector
