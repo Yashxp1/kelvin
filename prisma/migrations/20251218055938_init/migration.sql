@@ -76,6 +76,20 @@ CREATE TABLE "Integration" (
     CONSTRAINT "Integration_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "AI_Response" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT,
+    "provider" TEXT NOT NULL,
+    "responseData" JSONB,
+    "prompt" TEXT,
+    "url" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "AI_Response_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -96,3 +110,6 @@ ALTER TABLE "Authenticator" ADD CONSTRAINT "Authenticator_userId_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "Integration" ADD CONSTRAINT "Integration_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "AI_Response" ADD CONSTRAINT "AI_Response_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

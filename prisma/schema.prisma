@@ -20,9 +20,9 @@ model User {
 
   Authenticator Authenticator[]
 
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  summaries AI_Response[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  ai_responses AI_Response[]
 }
 
 model Account {
@@ -100,7 +100,7 @@ model AI_Response {
 
   provider String
 
-  responseData String
+  responseData Json?
   prompt       String?
   url          String?
 
