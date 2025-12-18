@@ -202,7 +202,7 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   integrations?: Prisma.IntegrationListRelationFilter
   Authenticator?: Prisma.AuthenticatorListRelationFilter
-  summaries?: Prisma.AI_ResponseListRelationFilter
+  ai_responses?: Prisma.AI_ResponseListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -217,7 +217,7 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   integrations?: Prisma.IntegrationOrderByRelationAggregateInput
   Authenticator?: Prisma.AuthenticatorOrderByRelationAggregateInput
-  summaries?: Prisma.AI_ResponseOrderByRelationAggregateInput
+  ai_responses?: Prisma.AI_ResponseOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -235,7 +235,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   integrations?: Prisma.IntegrationListRelationFilter
   Authenticator?: Prisma.AuthenticatorListRelationFilter
-  summaries?: Prisma.AI_ResponseListRelationFilter
+  ai_responses?: Prisma.AI_ResponseListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -276,7 +276,7 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -291,7 +291,7 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -306,7 +306,7 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -321,7 +321,7 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -468,20 +468,20 @@ export type UserUpdateOneWithoutIntegrationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutIntegrationsInput, Prisma.UserUpdateWithoutIntegrationsInput>, Prisma.UserUncheckedUpdateWithoutIntegrationsInput>
 }
 
-export type UserCreateNestedOneWithoutSummariesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSummariesInput, Prisma.UserUncheckedCreateWithoutSummariesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSummariesInput
+export type UserCreateNestedOneWithoutAi_responsesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAi_responsesInput, Prisma.UserUncheckedCreateWithoutAi_responsesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAi_responsesInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutSummariesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSummariesInput, Prisma.UserUncheckedCreateWithoutSummariesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSummariesInput
-  upsert?: Prisma.UserUpsertWithoutSummariesInput
+export type UserUpdateOneWithoutAi_responsesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAi_responsesInput, Prisma.UserUncheckedCreateWithoutAi_responsesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAi_responsesInput
+  upsert?: Prisma.UserUpsertWithoutAi_responsesInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSummariesInput, Prisma.UserUpdateWithoutSummariesInput>, Prisma.UserUncheckedUpdateWithoutSummariesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAi_responsesInput, Prisma.UserUpdateWithoutAi_responsesInput>, Prisma.UserUncheckedUpdateWithoutAi_responsesInput>
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -495,7 +495,7 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -509,7 +509,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -539,7 +539,7 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -553,7 +553,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -567,7 +567,7 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -581,7 +581,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -611,7 +611,7 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -625,7 +625,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuthenticatorInput = {
@@ -639,7 +639,7 @@ export type UserCreateWithoutAuthenticatorInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuthenticatorInput = {
@@ -653,7 +653,7 @@ export type UserUncheckedCreateWithoutAuthenticatorInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   integrations?: Prisma.IntegrationUncheckedCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuthenticatorInput = {
@@ -683,7 +683,7 @@ export type UserUpdateWithoutAuthenticatorInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuthenticatorInput = {
@@ -697,7 +697,7 @@ export type UserUncheckedUpdateWithoutAuthenticatorInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   integrations?: Prisma.IntegrationUncheckedUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutIntegrationsInput = {
@@ -711,7 +711,7 @@ export type UserCreateWithoutIntegrationsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutIntegrationsInput = {
@@ -725,7 +725,7 @@ export type UserUncheckedCreateWithoutIntegrationsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
-  summaries?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
+  ai_responses?: Prisma.AI_ResponseUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutIntegrationsInput = {
@@ -755,7 +755,7 @@ export type UserUpdateWithoutIntegrationsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutIntegrationsInput = {
@@ -769,10 +769,10 @@ export type UserUncheckedUpdateWithoutIntegrationsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
-  summaries?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
+  ai_responses?: Prisma.AI_ResponseUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutSummariesInput = {
+export type UserCreateWithoutAi_responsesInput = {
   id?: string
   name?: string | null
   email: string
@@ -786,7 +786,7 @@ export type UserCreateWithoutSummariesInput = {
   Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutSummariesInput = {
+export type UserUncheckedCreateWithoutAi_responsesInput = {
   id?: string
   name?: string | null
   email: string
@@ -800,23 +800,23 @@ export type UserUncheckedCreateWithoutSummariesInput = {
   Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutSummariesInput = {
+export type UserCreateOrConnectWithoutAi_responsesInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSummariesInput, Prisma.UserUncheckedCreateWithoutSummariesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAi_responsesInput, Prisma.UserUncheckedCreateWithoutAi_responsesInput>
 }
 
-export type UserUpsertWithoutSummariesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSummariesInput, Prisma.UserUncheckedUpdateWithoutSummariesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSummariesInput, Prisma.UserUncheckedCreateWithoutSummariesInput>
+export type UserUpsertWithoutAi_responsesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAi_responsesInput, Prisma.UserUncheckedUpdateWithoutAi_responsesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAi_responsesInput, Prisma.UserUncheckedCreateWithoutAi_responsesInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutSummariesInput = {
+export type UserUpdateToOneWithWhereWithoutAi_responsesInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSummariesInput, Prisma.UserUncheckedUpdateWithoutSummariesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAi_responsesInput, Prisma.UserUncheckedUpdateWithoutAi_responsesInput>
 }
 
-export type UserUpdateWithoutSummariesInput = {
+export type UserUpdateWithoutAi_responsesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -830,7 +830,7 @@ export type UserUpdateWithoutSummariesInput = {
   Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutSummariesInput = {
+export type UserUncheckedUpdateWithoutAi_responsesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -854,7 +854,7 @@ export type UserCountOutputType = {
   sessions: number
   integrations: number
   Authenticator: number
-  summaries: number
+  ai_responses: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -862,7 +862,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   integrations?: boolean | UserCountOutputTypeCountIntegrationsArgs
   Authenticator?: boolean | UserCountOutputTypeCountAuthenticatorArgs
-  summaries?: boolean | UserCountOutputTypeCountSummariesArgs
+  ai_responses?: boolean | UserCountOutputTypeCountAi_responsesArgs
 }
 
 /**
@@ -906,7 +906,7 @@ export type UserCountOutputTypeCountAuthenticatorArgs<ExtArgs extends runtime.Ty
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountSummariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountAi_responsesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AI_ResponseWhereInput
 }
 
@@ -923,7 +923,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   integrations?: boolean | Prisma.User$integrationsArgs<ExtArgs>
   Authenticator?: boolean | Prisma.User$AuthenticatorArgs<ExtArgs>
-  summaries?: boolean | Prisma.User$summariesArgs<ExtArgs>
+  ai_responses?: boolean | Prisma.User$ai_responsesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -963,7 +963,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   integrations?: boolean | Prisma.User$integrationsArgs<ExtArgs>
   Authenticator?: boolean | Prisma.User$AuthenticatorArgs<ExtArgs>
-  summaries?: boolean | Prisma.User$summariesArgs<ExtArgs>
+  ai_responses?: boolean | Prisma.User$ai_responsesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -976,7 +976,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     integrations: Prisma.$IntegrationPayload<ExtArgs>[]
     Authenticator: Prisma.$AuthenticatorPayload<ExtArgs>[]
-    summaries: Prisma.$AI_ResponsePayload<ExtArgs>[]
+    ai_responses: Prisma.$AI_ResponsePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1384,7 +1384,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   integrations<T extends Prisma.User$integrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$integrationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IntegrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Authenticator<T extends Prisma.User$AuthenticatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$AuthenticatorArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  summaries<T extends Prisma.User$summariesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$summariesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AI_ResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ai_responses<T extends Prisma.User$ai_responsesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ai_responsesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AI_ResponsePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1905,9 +1905,9 @@ export type User$AuthenticatorArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * User.summaries
+ * User.ai_responses
  */
-export type User$summariesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$ai_responsesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the AI_Response
    */

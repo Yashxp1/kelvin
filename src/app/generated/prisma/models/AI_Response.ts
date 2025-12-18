@@ -28,7 +28,6 @@ export type AI_ResponseMinAggregateOutputType = {
   id: string | null
   userId: string | null
   provider: string | null
-  responseData: string | null
   prompt: string | null
   url: string | null
   createdAt: Date | null
@@ -39,7 +38,6 @@ export type AI_ResponseMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   provider: string | null
-  responseData: string | null
   prompt: string | null
   url: string | null
   createdAt: Date | null
@@ -63,7 +61,6 @@ export type AI_ResponseMinAggregateInputType = {
   id?: true
   userId?: true
   provider?: true
-  responseData?: true
   prompt?: true
   url?: true
   createdAt?: true
@@ -74,7 +71,6 @@ export type AI_ResponseMaxAggregateInputType = {
   id?: true
   userId?: true
   provider?: true
-  responseData?: true
   prompt?: true
   url?: true
   createdAt?: true
@@ -169,7 +165,7 @@ export type AI_ResponseGroupByOutputType = {
   id: string
   userId: string | null
   provider: string
-  responseData: string
+  responseData: runtime.JsonValue | null
   prompt: string | null
   url: string | null
   createdAt: Date
@@ -201,7 +197,7 @@ export type AI_ResponseWhereInput = {
   id?: Prisma.StringFilter<"AI_Response"> | string
   userId?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   provider?: Prisma.StringFilter<"AI_Response"> | string
-  responseData?: Prisma.StringFilter<"AI_Response"> | string
+  responseData?: Prisma.JsonNullableFilter<"AI_Response">
   prompt?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   url?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AI_Response"> | Date | string
@@ -213,7 +209,7 @@ export type AI_ResponseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrder
-  responseData?: Prisma.SortOrder
+  responseData?: Prisma.SortOrderInput | Prisma.SortOrder
   prompt?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -228,7 +224,7 @@ export type AI_ResponseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AI_ResponseWhereInput | Prisma.AI_ResponseWhereInput[]
   userId?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   provider?: Prisma.StringFilter<"AI_Response"> | string
-  responseData?: Prisma.StringFilter<"AI_Response"> | string
+  responseData?: Prisma.JsonNullableFilter<"AI_Response">
   prompt?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   url?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AI_Response"> | Date | string
@@ -240,7 +236,7 @@ export type AI_ResponseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
   provider?: Prisma.SortOrder
-  responseData?: Prisma.SortOrder
+  responseData?: Prisma.SortOrderInput | Prisma.SortOrder
   prompt?: Prisma.SortOrderInput | Prisma.SortOrder
   url?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -257,7 +253,7 @@ export type AI_ResponseScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"AI_Response"> | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"AI_Response"> | string | null
   provider?: Prisma.StringWithAggregatesFilter<"AI_Response"> | string
-  responseData?: Prisma.StringWithAggregatesFilter<"AI_Response"> | string
+  responseData?: Prisma.JsonNullableWithAggregatesFilter<"AI_Response">
   prompt?: Prisma.StringNullableWithAggregatesFilter<"AI_Response"> | string | null
   url?: Prisma.StringNullableWithAggregatesFilter<"AI_Response"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AI_Response"> | Date | string
@@ -267,19 +263,19 @@ export type AI_ResponseScalarWhereWithAggregatesInput = {
 export type AI_ResponseCreateInput = {
   id?: string
   provider: string
-  responseData: string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: string | null
   url?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutSummariesInput
+  user?: Prisma.UserCreateNestedOneWithoutAi_responsesInput
 }
 
 export type AI_ResponseUncheckedCreateInput = {
   id?: string
   userId?: string | null
   provider: string
-  responseData: string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: string | null
   url?: string | null
   createdAt?: Date | string
@@ -289,19 +285,19 @@ export type AI_ResponseUncheckedCreateInput = {
 export type AI_ResponseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
-  responseData?: Prisma.StringFieldUpdateOperationsInput | string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutSummariesNestedInput
+  user?: Prisma.UserUpdateOneWithoutAi_responsesNestedInput
 }
 
 export type AI_ResponseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.StringFieldUpdateOperationsInput | string
-  responseData?: Prisma.StringFieldUpdateOperationsInput | string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -312,7 +308,7 @@ export type AI_ResponseCreateManyInput = {
   id?: string
   userId?: string | null
   provider: string
-  responseData: string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: string | null
   url?: string | null
   createdAt?: Date | string
@@ -322,7 +318,7 @@ export type AI_ResponseCreateManyInput = {
 export type AI_ResponseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
-  responseData?: Prisma.StringFieldUpdateOperationsInput | string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -333,7 +329,7 @@ export type AI_ResponseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   provider?: Prisma.StringFieldUpdateOperationsInput | string
-  responseData?: Prisma.StringFieldUpdateOperationsInput | string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -365,7 +361,6 @@ export type AI_ResponseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
-  responseData?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   url?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -376,7 +371,6 @@ export type AI_ResponseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   provider?: Prisma.SortOrder
-  responseData?: Prisma.SortOrder
   prompt?: Prisma.SortOrder
   url?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -428,7 +422,7 @@ export type AI_ResponseUncheckedUpdateManyWithoutUserNestedInput = {
 export type AI_ResponseCreateWithoutUserInput = {
   id?: string
   provider: string
-  responseData: string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: string | null
   url?: string | null
   createdAt?: Date | string
@@ -438,7 +432,7 @@ export type AI_ResponseCreateWithoutUserInput = {
 export type AI_ResponseUncheckedCreateWithoutUserInput = {
   id?: string
   provider: string
-  responseData: string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: string | null
   url?: string | null
   createdAt?: Date | string
@@ -478,7 +472,7 @@ export type AI_ResponseScalarWhereInput = {
   id?: Prisma.StringFilter<"AI_Response"> | string
   userId?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   provider?: Prisma.StringFilter<"AI_Response"> | string
-  responseData?: Prisma.StringFilter<"AI_Response"> | string
+  responseData?: Prisma.JsonNullableFilter<"AI_Response">
   prompt?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   url?: Prisma.StringNullableFilter<"AI_Response"> | string | null
   createdAt?: Prisma.DateTimeFilter<"AI_Response"> | Date | string
@@ -488,7 +482,7 @@ export type AI_ResponseScalarWhereInput = {
 export type AI_ResponseCreateManyUserInput = {
   id?: string
   provider: string
-  responseData: string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: string | null
   url?: string | null
   createdAt?: Date | string
@@ -498,7 +492,7 @@ export type AI_ResponseCreateManyUserInput = {
 export type AI_ResponseUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
-  responseData?: Prisma.StringFieldUpdateOperationsInput | string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -508,7 +502,7 @@ export type AI_ResponseUpdateWithoutUserInput = {
 export type AI_ResponseUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
-  responseData?: Prisma.StringFieldUpdateOperationsInput | string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -518,7 +512,7 @@ export type AI_ResponseUncheckedUpdateWithoutUserInput = {
 export type AI_ResponseUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   provider?: Prisma.StringFieldUpdateOperationsInput | string
-  responseData?: Prisma.StringFieldUpdateOperationsInput | string
+  responseData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   prompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   url?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -594,7 +588,7 @@ export type $AI_ResponsePayload<ExtArgs extends runtime.Types.Extensions.Interna
     id: string
     userId: string | null
     provider: string
-    responseData: string
+    responseData: runtime.JsonValue | null
     prompt: string | null
     url: string | null
     createdAt: Date
@@ -1026,7 +1020,7 @@ export interface AI_ResponseFieldRefs {
   readonly id: Prisma.FieldRef<"AI_Response", 'String'>
   readonly userId: Prisma.FieldRef<"AI_Response", 'String'>
   readonly provider: Prisma.FieldRef<"AI_Response", 'String'>
-  readonly responseData: Prisma.FieldRef<"AI_Response", 'String'>
+  readonly responseData: Prisma.FieldRef<"AI_Response", 'Json'>
   readonly prompt: Prisma.FieldRef<"AI_Response", 'String'>
   readonly url: Prisma.FieldRef<"AI_Response", 'String'>
   readonly createdAt: Prisma.FieldRef<"AI_Response", 'DateTime'>
