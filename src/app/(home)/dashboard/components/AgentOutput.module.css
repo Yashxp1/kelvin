@@ -1,0 +1,158 @@
+.container {
+  width: 100%;
+  max-height: 10px;
+  animation: fadeInSlide 500ms ease-in-out;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  border-radius: 0.75rem;
+  background-color: white;
+  border: 1px solid rgb(228, 228, 231);
+}
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: rgb(24, 24, 27);
+    border-color: rgb(39, 39, 42);
+  }
+}
+
+.content {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.promptSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.promptLabel {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(161, 161, 170);
+}
+
+.promptText {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: rgb(39, 39, 42);
+}
+
+@media (prefers-color-scheme: dark) {
+  .promptText {
+    color: rgb(228, 228, 231);
+  }
+}
+
+.divider {
+  height: 1px;
+  background-color: rgb(244, 244, 245);
+}
+
+@media (prefers-color-scheme: dark) {
+  .divider {
+    background-color: rgb(39, 39, 42);
+  }
+}
+
+.outputSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.agentInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(161, 161, 170);
+}
+
+.copyButton {
+  opacity: 0;
+  transition: all 150ms ease-in-out;
+  color: rgb(161, 161, 170);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.copyButton:hover {
+  color: rgb(63, 63, 70);
+}
+
+@media (prefers-color-scheme: dark) {
+  .copyButton:hover {
+    color: rgb(212, 212, 216);
+  }
+}
+
+.outputSection:hover .copyButton {
+  opacity: 1;
+}
+
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeleton1 {
+  height: 1rem;
+  width: 75%;
+}
+
+.skeleton2 {
+  height: 1rem;
+  width: 100%;
+}
+
+.skeleton3 {
+  height: 1rem;
+  width: 83.333333%;
+}
+
+.summaryText {
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: rgb(63, 63, 70);
+}
+
+@media (prefers-color-scheme: dark) {
+  .summaryText {
+    color: rgb(212, 212, 216);
+  }
+}
+
+.summaryLine {
+  margin-bottom: 0.5rem;
+}
+
+.summaryLine:last-child {
+  margin-bottom: 0;
+}
