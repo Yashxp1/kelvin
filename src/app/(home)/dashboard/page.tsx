@@ -1,7 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import {
+  ArrowRight,
+  SlidersHorizontal,
+  ChevronDown,
+  ChevronUp,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 import {
@@ -18,7 +23,7 @@ import ActionSelector from './components/ActionSelector';
 import AgentOutput from './components/AgentOutput';
 import { useCreateNotionPage, useNotionSummary } from '@/hooks/notion';
 import PromptHistory from './components/PromptHistory';
-
+import { cn } from '@/lib/utils';
 const Page = () => {
   const { mutate: generatePR, isPending: isPRPending } = useGeneratePR();
   const { mutate: summary, isPending: isSummaryPending } = useSummary();
@@ -41,6 +46,8 @@ const Page = () => {
   const [repoSummary, setAgentRepoSummary] = useState('');
   const [notionSummary, setAgentNotionSummary] = useState('');
 
+  const [showMobileOptions, setShowMobileOptions] = useState(false);
+
   const isLoadingAction =
     isPRPending ||
     isSummaryPending ||
@@ -57,7 +64,6 @@ const Page = () => {
     if (!agentPrompt.trim()) return toast.error('Prompt cannot be empty');
 
     const GithubPayload = { repo: selectedTarget.name, prompt: agentPrompt };
-    // const NotionPayload = { pageId: selectedTarget.id, prompt: agentPrompt };
 
     switch (currentAction.name) {
       case 'Pull-request':
@@ -79,7 +85,7 @@ const Page = () => {
       case 'Create-issue':
         issue(GithubPayload);
         break;
-      case 'Search-repo':
+      case 'Update-file':
         searchRepo(GithubPayload);
         break;
       case 'Create-page':
@@ -105,22 +111,39 @@ const Page = () => {
     }
   };
 
-  return (
-    <div className="w-full rounded-t-lg text-zinc-900 dark:text-zinc-100 flex flex-col items-center pt-24 pb-10 px-4 bg-linear-to-b from-blue-700/80 to-transparent dark:from-blue-800/25">
-      <div className="fixed inset-0 pointer-events-none" />
+  const SubmitButton = ({ className }: { className?: string }) => (
+    <button
+      onClick={handleAgentAction}
+      disabled={isLoadingAction}
+      className={cn(
+        'flex items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition-all hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:hover:scale-100',
+        className
+      )}
+    >
+      {isLoadingAction ? (
+        <Spinner className="text-current" />
+      ) : (
+        <ArrowRight size={16} />
+      )}
+    </button>
+  );
 
-      <div className="w-full max-w-3xl z-10 space-y-8">
-        <div className="flex flex-col items-center space-y-2 text-center mb-8">
-          <h1 className="text-5xl font-bold tracking-tight text-white dark:text-zinc-50">
+  return (
+    <div className="flex w-full flex-col items-center rounded-t-lg bg-linear-to-b from-[#5438DC]/80 to-transparent px-4 pb-10 pt-16 text-zinc-900 md:pt-24">
+      <div className="pointer-events-none fixed inset-0" />
+
+      <div className="z-10 w-full max-w-3xl space-y-8">
+        <div className="mb-8 flex flex-col items-center space-y-2 text-center">
+          <h1 className="font-manrope text-3xl font-bold tracking-tight text-white md:text-5xl">
             Kelvin.
           </h1>
-          <p className="text-sm text-white dark:text-zinc-300">
+          <p className="max-w-[80%] text-sm text-white/90 md:text-base">
             Automate your workflow. Select a target, choose an action, and
             execute.
           </p>
         </div>
 
-        <div className="group relative rounded-2xl border border-zinc-200 bg-white shadow-md transition-all dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="group relative rounded-2xl border border-zinc-200 bg-white shadow-md transition-all">
           <div className="p-4">
             <textarea
               value={agentPrompt}
@@ -128,63 +151,78 @@ const Page = () => {
                 setAgentPrompt(e.target.value);
                 setAgentRepoSummary('');
               }}
-              className="min-h-[120px] w-full resize-none bg-transparent text-base leading-relaxed placeholder:text-zinc-400 focus:outline-none dark:placeholder:text-zinc-600"
+              className="min-h-[120px] w-full resize-none bg-transparent text-base leading-relaxed placeholder:text-zinc-400 focus:outline-none"
               placeholder="Describe the task for the agent..."
               autoFocus
             />
           </div>
 
-          <div className="flex items-center justify-between border-t border-zinc-100 bg-zinc-50/50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-900/50 rounded-b-2xl">
-            <div className="flex items-center gap-2">
-              <PromptHistory />
-              <div className="h-5 w-px bg-zinc-200 dark:bg-zinc-700" />
-              <AppSelector
-                currentApp={currentApp}
-                onSelect={(app) => {
-                  setCurrentApp(app);
-                  setSelectedTarget(null);
-                  setCurrentAction(null);
-                }}
-              />
-              {currentApp?.name === 'Github' ? (
-                <RepoSelector
-                  selectedRepo={selectedTarget?.name || null}
-                  onSelect={(name) => setSelectedTarget({ id: name, name })}
-                  onClear={() => setSelectedTarget(null)}
-                />
-              ) : currentApp ? (
-                <GetPages
-                  selectedPageName={selectedTarget?.name || null}
-                  onSelect={(id, title) =>
-                    setSelectedTarget({ id, name: title })
-                  }
-                  onClear={() => setSelectedTarget(null)}
-                />
-              ) : null}
-            </div>
-
-            <div className="flex items-center gap-3">
-              {currentApp && (
-                <ActionSelector
-                  appName={currentApp.name}
-                  currentAction={currentAction}
-                  onSelect={setCurrentAction}
-                />
-              )}
-
-              <div className="h-5 w-px bg-zinc-200 dark:bg-zinc-700" />
-
+          <div className="rounded-b-2xl border-t border-zinc-100 bg-zinc-50/50 px-3 py-2.5">
+            <div className="flex items-center justify-between md:hidden">
               <button
-                onClick={handleAgentAction}
-                disabled={isLoadingAction}
-                className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white shadow-sm transition-all hover:bg-zinc-800 hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+                onClick={() => setShowMobileOptions(!showMobileOptions)}
+                className="flex items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-200/50"
               >
-                {isLoadingAction ? (
-                  <Spinner className="text-current" />
+                <SlidersHorizontal size={14} />
+                {showMobileOptions ? 'Hide Options' : 'Configure Agent'}
+                {showMobileOptions ? (
+                  <ChevronUp size={14} />
                 ) : (
-                  <ArrowRight size={16} />
+                  <ChevronDown size={14} />
                 )}
               </button>
+
+              <SubmitButton className="h-8 w-8 hover:scale-105" />
+            </div>
+            <div
+              className={cn(
+                'md:flex md:flex-row md:items-center md:justify-between md:gap-0',
+                showMobileOptions
+                  ? 'mt-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2'
+                  : 'hidden'
+              )}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <PromptHistory />
+                <div className="hidden h-5 w-px bg-zinc-200 md:block" />
+                <AppSelector
+                  currentApp={currentApp}
+                  onSelect={(app) => {
+                    setCurrentApp(app);
+                    setSelectedTarget(null);
+                    setCurrentAction(null);
+                  }}
+                />
+                {currentApp?.name === 'Github' ? (
+                  <RepoSelector
+                    selectedRepo={selectedTarget?.name || null}
+                    onSelect={(name) => setSelectedTarget({ id: name, name })}
+                    onClear={() => setSelectedTarget(null)}
+                  />
+                ) : currentApp ? (
+                  <GetPages
+                    selectedPageName={selectedTarget?.name || null}
+                    onSelect={(id, title) =>
+                      setSelectedTarget({ id, name: title })
+                    }
+                    onClear={() => setSelectedTarget(null)}
+                  />
+                ) : null}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                {currentApp && (
+                  <ActionSelector
+                    appName={currentApp.name}
+                    currentAction={currentAction}
+                    onSelect={setCurrentAction}
+                  />
+                )}
+
+                <div className="hidden h-5 w-px bg-zinc-200 md:block" />
+
+                <SubmitButton className="hidden h-8 w-8 hover:scale-105 md:flex" />
+              </div>
             </div>
           </div>
         </div>

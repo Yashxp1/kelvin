@@ -1,16 +1,21 @@
 import type { Metadata } from 'next';
-import { Inter, Geist_Mono } from 'next/font/google';
+import { Inter, Roboto, Manrope } from 'next/font/google';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from '@/components/ui/sonner';
 
-const geistSans = Inter({
+const inter = Inter({
   variable: '--font-geist-sans',
   subsets: ['latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const manrope = Manrope({
+  variable: '--font-geist-manrope',
+  subsets: ['latin'],
+});
+
+const roboto = Roboto({
+  variable: '--font-geist-roboto',
   subsets: ['latin'],
 });
 
@@ -30,11 +35,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable}   antialiased`}
+        className={`${inter.variable} ${manrope.variable} ${roboto.variable}   antialiased`}
       >
         <SessionProvider>
           {children}
-          <Toaster position='top-center'/>
+          <Toaster position="top-center" />
         </SessionProvider>
       </body>
     </html>

@@ -23,7 +23,7 @@ const AppSelector = ({ currentApp, onSelect }: AppSelectorProps) => {
           {currentApp ? (
             <>
               <currentApp.icon size={15} />
-              <span className="text-xs">{currentApp.name}</span>
+              <span className="text-xs ">{currentApp.name}</span>
             </>
           ) : (
             <>

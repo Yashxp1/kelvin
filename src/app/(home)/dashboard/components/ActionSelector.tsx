@@ -25,7 +25,7 @@ const ActionSelector = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="text-xs rounded-full" variant="secondary">
+        <Button className="text-xs border rounded-full" variant="secondary">
           {currentAction ? (
             <>
               <currentAction.icon size={14} />

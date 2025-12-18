@@ -20,7 +20,7 @@ export const GithubActions = [
     icon: GitPullRequestArrow,
   },
   {
-    name: 'Search-repo',
+    name: 'Update-file',
     icon: FileScan,
   },
   {
@@ -34,10 +34,10 @@ export const NotionActions = [
     name: 'Create-page',
     icon: NotebookText,
   },
-  {
-    name: 'Update-page',
-    icon: FilePenLine,
-  },
+  // {
+  //   name: 'Update-page',
+  //   icon: FilePenLine,
+  // },
   {
     name: 'Summarise',
     icon: ScanEye,

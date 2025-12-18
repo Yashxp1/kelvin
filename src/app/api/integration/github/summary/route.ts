@@ -75,7 +75,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         throw new Error('AI quota exceeded. Try again later.');
       }
 
-      const summary = await prisma.aI_Response.create({
+      await prisma.aI_Response.create({
         data: {
           provider: 'github',
           prompt,
@@ -85,7 +85,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         },
       });
 
-      return NextResponse.json({ success: true, data: summary });
+      console.log('AI Response ----------------------->', aiResponse.data);
+
+      return NextResponse.json({ success: true, data: aiResponse.data });
     } catch (error) {
       console.error('AI quota exceeded.');
       return NextResponse.json(

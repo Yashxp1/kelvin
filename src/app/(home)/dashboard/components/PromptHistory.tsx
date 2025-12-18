@@ -26,7 +26,7 @@ const PromptHistory = () => {
     text: string;
     provider: string;
   }) => (
-    <div className="rounded-full dark:bg-zinc-800 bg-zinc-50 border px-3 py-2 text-xs font-medium text-card-foreground transition-colors hover:bg-muted/50 flex justify-between items-center">
+    <div className="rounded-full bg-zinc-50 border px-3 py-2 text-xs font-medium text-card-foreground transition-colors hover:bg-muted/50 flex justify-between items-center">
       {text}
       {provider === 'github' ? <FaGithub /> : <RiNotionFill />}
     </div>

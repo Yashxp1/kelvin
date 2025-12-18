@@ -35,7 +35,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
   }
 
   return (
-    <div className="group relative flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white text-sm shadow-sm transition-all hover:shadow-md dark:border-zinc-800 dark:bg-zinc-950">
+    <div className="group relative flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white text-sm shadow-sm transition-all hover:shadow-md">
       <div className="p-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-2 text-zinc-500">
@@ -46,7 +46,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+              className="h-7 w-7 text-zinc-500 hover:text-zinc-900"
               onClick={handleCopy}
               title="Copy to clipboard"
             >
@@ -58,7 +58,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+                  className="h-7 w-7 text-zinc-500 hover:text-zinc-900"
                   title="Expand view"
                 >
                   <Maximize2 size={14} />
@@ -68,11 +68,9 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
                 <DialogHeader>
                   <DialogTitle className="mb-2 flex items-center gap-2  text-sm text-zinc-500">
                     Prompt:
-                    <span className="text-zinc-900 dark:text-zinc-100">
-                      {prompt}
-                    </span>
+                    <span className="text-zinc-900">{prompt}</span>
                   </DialogTitle>
-                  <DialogDescription className="whitespace-pre-wrap text-base text-zinc-800 dark:text-zinc-300">
+                  <DialogDescription className="whitespace-pre-wrap text-base text-zinc-800">
                     {summary}
                   </DialogDescription>
                 </DialogHeader>
@@ -97,9 +95,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
           </div>
         </div>
 
-        <div className="font-medium text-zinc-900 dark:text-zinc-100 py-0.5">
-          {prompt}
-        </div>
+        <div className="font-medium text-zinc-900 py-0.5">{prompt}</div>
 
         {isPending ? (
           <div className="space-y-2 py-1">
@@ -109,12 +105,12 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
           </div>
         ) : (
           <div className="relative">
-            <p className="line-clamp-4 leading-relaxed text-zinc-600 dark:text-zinc-400">
+            <p className="line-clamp-4 leading-relaxed text-zinc-600">
               {summary}
             </p>
 
             {summary.length > 200 && (
-              <div className="absolute bottom-0 left-0 right-0 h-6 bg-linear-to-t from-white to-transparent dark:from-zinc-950"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-6 bg-linear-to-t from-white to-transparent"></div>
             )}
           </div>
         )}

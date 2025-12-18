@@ -1,4 +1,4 @@
-import { Home, PlugIcon } from 'lucide-react';
+import { History, Home, PlugIcon } from 'lucide-react';
 
 import {
   Sidebar,
@@ -10,7 +10,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { ModeToggle } from '../darkmode/ModeToggle';
 
 const items = [
   {
@@ -22,6 +21,11 @@ const items = [
     title: 'Integrations',
     url: '/integrations',
     icon: PlugIcon,
+  },
+  {
+    title: 'History',
+    url: '/history',
+    icon: History,
   },
 ];
 
@@ -37,8 +41,8 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
-                      <item.icon className="dark:text-zinc-300/90 text-zinc-600 stroke-2.8" />
-                      <span className="dark:text-zinc-300/90 text-zinc-600 font-semibold">
+                      <item.icon className="text-zinc-600 stroke-2.8" />
+                      <span className="text-zinc-600 font-semibold">
                         {item.title}
                       </span>
                     </a>
@@ -49,11 +53,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <div className="flex items-center gap-2">
-          <ModeToggle />
-        </div>
-      </SidebarFooter>
+      <SidebarFooter></SidebarFooter>
     </Sidebar>
   );
 }

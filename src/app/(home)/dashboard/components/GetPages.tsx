@@ -65,7 +65,7 @@ const GetPages = ({ selectedPageName, onSelect, onClear }: GetPagesProps) => {
             e.preventDefault();
             onClear();
           }}
-          className="hover:bg-zinc-200 dark:hover:bg-zinc-700 bg-zinc-100 dark:bg-zinc-800 rounded-full p-0.5 border"
+          className="hover:bg-zinc-200 bg-zinc-100 rounded-full p-0.5 border"
         >
           <X size={13} />
         </button>
