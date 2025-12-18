@@ -71,11 +71,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
       `);
 
-      const summary = await prisma.ai_response.create({
+      if (!aiResponse) {
+        throw new Error('AI quota exceeded. Try again later.');
+      }
+
+      const summary = await prisma.aI_Response.create({
         data: {
           provider: 'github',
           prompt,
-          responseData: aiResponse?.data,
+          responseData: aiResponse.data || '',
           url: `https://github.com/${ghUser.login}/${repo}/pull/${pullNumber}`,
           userId: owner,
         },

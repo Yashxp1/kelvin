@@ -56,11 +56,11 @@ const createIssue = async (req: NextRequest, user: { id: string }) => {
     body: issueData.body,
   });
 
-  const issueRes = await prisma.ai_response.create({
+  const issueRes = await prisma.aI_Response.create({
     data: {
       provider: 'github',
       prompt,
-      responseData: issue.data as any,
+      responseData: issue as any,
       url: `https://github.com/${ghUser.login}/${repo}/issues/${issue.data.number}`,
       userId: user.id,
     },

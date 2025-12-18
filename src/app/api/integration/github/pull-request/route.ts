@@ -96,11 +96,11 @@ User prompt: ${prompt}
     body: prBody,
   });
 
-  const res = await prisma.ai_response.create({
+  const res = await prisma.aI_Response.create({
     data: {
       provider: 'github',
       prompt,
-      responseData: aiResponse?.data,
+      responseData: aiResponse?.data || '',
       url: `https://github.com/${ghUser.login}/${repo}/pull/${branchName}`,
       userId: user.id,
     },

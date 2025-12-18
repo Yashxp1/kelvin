@@ -127,11 +127,11 @@ ${prompt}`;
     base: 'main',
   });
 
-  const res = await prisma.ai_response.create({
+  const res = await prisma.aI_Response.create({
     data: {
       provider: 'github',
       prompt,
-      responseData: aiRes.data,
+      responseData: aiRes.data || '',
       url: `https://github.com/${ghUser.login}/${repo}/pull/${branchName}`,
     },
   });

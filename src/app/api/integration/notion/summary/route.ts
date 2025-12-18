@@ -70,7 +70,7 @@ const summary = async (req: NextRequest, user: { id: string }) => {
 
   const summary = await Gemini(aiPrompt);
 
-  const saveSummary = await prisma.ai_response.create({
+  await prisma.aI_Response.create({
     data: {
       provider: 'notion',
       prompt,
@@ -80,7 +80,7 @@ const summary = async (req: NextRequest, user: { id: string }) => {
     },
   });
 
-  return saveSummary;
+  return summary;
 };
 
 export const POST = withApiHandler(summary);

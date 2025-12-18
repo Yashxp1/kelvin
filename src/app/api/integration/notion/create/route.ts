@@ -47,7 +47,11 @@ const createPage = async (req: NextRequest, user: { id: string }) => {
     throw new Error('AI returned empty content');
   }
 
-  const blocks = chunkText(aiText).map((chunk) => ({
+  const [rawTitle, ...rest] = aiText.split('\n');
+  const title = rawTitle.trim().slice(0, 80);
+  const content = rest.join('\n').trim();
+
+  const blocks = chunkText(content).map((chunk) => ({
     object: 'block',
     type: 'paragraph',
     paragraph: {
@@ -67,22 +71,34 @@ const createPage = async (req: NextRequest, user: { id: string }) => {
     },
     properties: {
       title: {
-        title: [{ text: { content: aiText.slice(0, 2000) } }],
+        title: [{ text: { content: title } }],
       },
     },
     children: blocks as any,
   });
 
-  const pageRes = await prisma.ai_response.create({
+  const pageUrl = (page as { url: string }).url;
+
+  await prisma.aI_Response.create({
     data: {
       provider: 'notion',
       prompt,
-      responseData: page as any,
+      responseData: {
+        id: page.id,
+        url: pageUrl || '',
+        title,
+      },
       userId: user.id,
     },
   });
 
-  return page;
+  return {
+    page: {
+      id: page.id,
+      title,
+      url: pageUrl,
+    },
+  };
 };
 
 export const POST = withApiHandler(createPage);
