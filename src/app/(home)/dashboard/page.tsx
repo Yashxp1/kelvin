@@ -106,8 +106,8 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full rounded-t-lg text-zinc-900 dark:text-zinc-100 flex flex-col items-center pt-24 pb-10 px-4 bg-gradient-to-b from-blue-700/80 to-transparent dark:from-blue-900/25">
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.05] bg-[radial-gradient(circle,currentColor_1px,transparent_1px)] bg-[length:24px_24px]" />
+    <div className="w-full rounded-t-lg text-zinc-900 dark:text-zinc-100 flex flex-col items-center pt-24 pb-10 px-4 bg-linear-to-b from-blue-700/80 to-transparent dark:from-blue-800/25">
+      <div className="fixed inset-0 pointer-events-none" />
 
       <div className="w-full max-w-3xl z-10 space-y-8">
         <div className="flex flex-col items-center space-y-2 text-center mb-8">
@@ -120,7 +120,7 @@ const Page = () => {
           </p>
         </div>
 
-        <div className="group relative rounded-2xl border border-zinc-200 bg-white shadow-lg transition-all dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="group relative rounded-2xl border border-zinc-200 bg-white shadow-md transition-all dark:border-zinc-800 dark:bg-zinc-900">
           <div className="p-4">
             <textarea
               value={agentPrompt}
@@ -136,6 +136,8 @@ const Page = () => {
 
           <div className="flex items-center justify-between border-t border-zinc-100 bg-zinc-50/50 px-3 py-2.5 dark:border-zinc-800 dark:bg-zinc-900/50 rounded-b-2xl">
             <div className="flex items-center gap-2">
+              <PromptHistory />
+              <div className="h-5 w-px bg-zinc-200 dark:bg-zinc-700" />
               <AppSelector
                 currentApp={currentApp}
                 onSelect={(app) => {
@@ -170,7 +172,7 @@ const Page = () => {
                 />
               )}
 
-              <div className="h-5 w-[1px] bg-zinc-200 dark:bg-zinc-700" />
+              <div className="h-5 w-px bg-zinc-200 dark:bg-zinc-700" />
 
               <button
                 onClick={handleAgentAction}

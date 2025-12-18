@@ -1,4 +1,4 @@
-import { Copy, Maximize2, Sparkles } from 'lucide-react';
+import { Copy, Maximize2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -13,7 +13,6 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import PromptHistory from './PromptHistory';
 
 interface AgentOutputProps {
   prompt: string;
@@ -32,7 +31,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
   };
 
   if (!summary && !isPending) {
-    return <PromptHistory />;
+    return null;
   }
 
   return (
@@ -115,7 +114,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
             </p>
 
             {summary.length > 200 && (
-              <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent dark:from-zinc-950"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-6 bg-linear-to-t from-white to-transparent dark:from-zinc-950"></div>
             )}
           </div>
         )}

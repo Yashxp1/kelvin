@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { IconType } from 'react-icons/lib';
 
 export type PromptHistoryItem = {
   id: string;
   prompt: string;
+  provider: string
+  icon: IconType;
   createdAt: string;
 };
 
