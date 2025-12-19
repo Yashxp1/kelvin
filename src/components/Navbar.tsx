@@ -6,16 +6,22 @@ import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { LogoutAction } from '@/lib/auth/logout';
+
 const Navbar = () => {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
-
-  const navItems = [
-    { name: 'Dashboard', href: '/dashboard' },
-    { name: 'Integration', href: '/integrations' },
-    { name: 'History', href: '/history' },
-    { name: 'Logout', href: '#' },
-  ];
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
@@ -29,52 +35,133 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'transition-colors hover:text-foreground/80',
-                pathname === item.href
-                  ? 'text-foreground'
-                  : 'text-foreground/60'
-              )}
-            >
-              {item.name}
-            </Link>
-          ))}
+          <Link
+            href="/dashboard"
+            className={cn(
+              'transition-colors hover:text-foreground/80',
+              pathname === '/dashboard'
+                ? 'text-foreground'
+                : 'text-foreground/60'
+            )}
+          >
+            Dashboard
+          </Link>
+
+          <Link
+            href="/integrations"
+            className={cn(
+              'transition-colors hover:text-foreground/80',
+              pathname === '/integrations'
+                ? 'text-foreground'
+                : 'text-foreground/60'
+            )}
+          >
+            Integration
+          </Link>
+
+          <Link
+            href="/history"
+            className={cn(
+              'transition-colors hover:text-foreground/80',
+              pathname === '/history' ? 'text-foreground' : 'text-foreground/60'
+            )}
+          >
+            History
+          </Link>
+
+          <LogoutConfirmModal>
+            <button className="text-left text-foreground/60 transition-colors hover:text-foreground">
+              Logout
+            </button>
+          </LogoutConfirmModal>
         </div>
 
         <button
           className="md:hidden text-foreground/80 hover:text-foreground focus:outline-none"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isMobileMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
       </div>
-
-      {isOpen && (
+      {isMobileMenuOpen && (
         <div className="md:hidden border-b border-border/40 bg-background/95 backdrop-blur-xl">
-          <div className="flex flex-col space-y-4 px-4 py-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={cn(
-                  'text-sm font-medium transition-colors hover:text-foreground',
-                  pathname === item.href
-                    ? 'text-foreground'
-                    : 'text-foreground/60'
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div className="flex flex-col space-y-4 px-4 py-6 text-sm font-medium">
+            <Link
+              href="/dashboard"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={cn(
+                'transition-colors hover:text-foreground',
+                pathname === '/dashboard'
+                  ? 'text-foreground'
+                  : 'text-foreground/60'
+              )}
+            >
+              Dashboard
+            </Link>
+
+            <Link
+              href="/integrations"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={cn(
+                'transition-colors hover:text-foreground',
+                pathname === '/integrations'
+                  ? 'text-foreground'
+                  : 'text-foreground/60'
+              )}
+            >
+              Integration
+            </Link>
+
+            <Link
+              href="/history"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={cn(
+                'transition-colors hover:text-foreground',
+                pathname === '/history'
+                  ? 'text-foreground'
+                  : 'text-foreground/60'
+              )}
+            >
+              History
+            </Link>
+
+            <LogoutConfirmModal>
+              <button className="text-left text-foreground/60 transition-colors hover:text-foreground">
+                Logout
+              </button>
+            </LogoutConfirmModal>
           </div>
         </div>
       )}
     </nav>
+  );
+};
+
+const LogoutConfirmModal = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Logout</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to logout of your account?
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="gap-2 sm:gap-0">
+          <DialogClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DialogClose>
+          <Button variant="destructive" onClick={() => LogoutAction()}>
+            Logout
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -13,7 +13,7 @@ import { History } from 'lucide-react';
 import { RiNotionFill } from 'react-icons/ri';
 import { FaGithub } from 'react-icons/fa';
 import { useState } from 'react';
-import { RiHistoryFill } from "react-icons/ri";
+import { RiHistoryFill } from 'react-icons/ri';
 
 const PromptHistory = () => {
   const { data: history, isLoading } = useGetHistory();
@@ -39,17 +39,13 @@ const PromptHistory = () => {
   }
 
   if (!history || history.length === 0) {
-    return (
-      <div className="flex h-34 w-full items-center justify-center rounded-lg border border-dashed text-xs text-muted-foreground">
-        No prompts recorded yet.
-      </div>
-    );
+    return null;
   }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-       <RiHistoryFill />
+        <RiHistoryFill />
       </DialogTrigger>
 
       <DialogContent className="max-h-[80vh] sm:max-w-[500px]">

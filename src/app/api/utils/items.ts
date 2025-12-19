@@ -48,9 +48,11 @@ export const apps = [
   {
     name: 'Github',
     icon: FaGithub,
+    provider: 'github',
   },
   {
     name: 'Notion',
     icon: RiNotionFill,
+    provider: 'notion',
   },
 ];
