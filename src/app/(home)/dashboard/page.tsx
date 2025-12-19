@@ -129,7 +129,7 @@ const Page = () => {
   );
 
   return (
-    <div className="flex w-full flex-col items-center rounded-t-lg bg-linear-to-b from-[#5438DC]/80 to-transparent px-4 pb-10 pt-16 text-zinc-900 md:pt-24">
+    <div className="flex w-full flex-col items-center rounded-t-lg bg-linear-to-b from-[#155DFC] to-transparent px-4 pb-10 pt-16 text-zinc-900 md:pt-24">
       <div className="pointer-events-none fixed inset-0" />
 
       <div className="z-10 w-full max-w-3xl space-y-8">

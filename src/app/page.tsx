@@ -1,15 +1,23 @@
 'use client';
+import Brand from '@/components/LandingPage/Brand';
+import Features from '@/components/LandingPage/Features';
+import Footer from '@/components/LandingPage/Footer';
+import Hero from '@/components/LandingPage/Hero';
+import Navbar from '@/components/LandingPage/Navbar';
+import { Instrument_Sans } from 'next/font/google';
 
-import Link from 'next/link';
+const instrumentSans = Instrument_Sans({ subsets: ['latin'] });
 
 const page = () => {
   return (
-    <div className="flex justify-center items-center h-screen bg-blue-900">
-      <h1>This is the landing page - to be done later!!!!!!!!</h1>
-
-      <Link href="/dashboard">Dashboard</Link>
+    <div className={instrumentSans.className}>
+      <Navbar />
+      <Hero />
+      <Features />
+      <Footer />
+      <Brand />
     </div>
   );
 };
 
-export default page; 
+export default page;
