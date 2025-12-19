@@ -16,45 +16,40 @@ interface GetPagesProps {
 }
 
 const GetPages = ({ selectedPageName, onSelect, onClear }: GetPagesProps) => {
-  const { data: pages, isLoading } = useGetNotionPages();
+  const { data, isLoading } = useGetNotionPages();
 
-  const getPageTitle = (page: any) =>
-    page.title?.properties?.title?.title
-      ?.map((t: any) => t.plain_text)
-      .join('') || 'Untitled page';
+  const pages = data?.data ?? [];
 
   return (
-    <div className="flex items-center justify-center gap-1">
+    <div className="flex items-center gap-1">
       <DropdownMenu>
-        <DropdownMenuTrigger className="text-xs" asChild>
+        <DropdownMenuTrigger asChild>
           <Button variant="secondary" className="text-xs rounded-full border">
             <LibraryBig size={12} />
             <span className="truncate max-w-[100px]">
-              {selectedPageName ? selectedPageName : 'Select Page'}
+              {selectedPageName || 'Select Page'}
             </span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+
+        <DropdownMenuContent className="w-64">
           {isLoading ? (
-            <div className="p-2">
+            <div className="p-3 flex justify-center">
               <Spinner />
             </div>
+          ) : pages.length > 0 ? (
+            pages.map((page) => (
+              <DropdownMenuItem
+                key={page.id}
+                onClick={() => onSelect(page.id, page.title)}
+                className="flex justify-between gap-2 text-xs py-2 cursor-pointer"
+              >
+                <span className="truncate">{page.title}</span>
+                <ArrowUpRight size={12} className="text-zinc-400" />
+              </DropdownMenuItem>
+            ))
           ) : (
-            pages?.map((page: any) => {
-              const title = getPageTitle(page);
-              return (
-                <DropdownMenuItem
-                  className="flex justify-between gap-2 text-xs py-2 cursor-pointer"
-                  key={page.id}
-                  onClick={() => onSelect(page.id, title)}
-                >
-                  <span className="truncate">
-                    {title.length > 20 ? title.slice(0, 20) + '...' : title}
-                  </span>
-                  <ArrowUpRight size={12} className="text-zinc-400" />
-                </DropdownMenuItem>
-              );
-            })
+            <div className="p-3 text-xs text-zinc-500">No pages found</div>
           )}
         </DropdownMenuContent>
       </DropdownMenu>

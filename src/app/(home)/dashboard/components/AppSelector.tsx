@@ -12,14 +12,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface AppSelectorProps {
-  apps: AppItem[]; // already filtered (connected only)
+  apps: AppItem[]; 
   currentApp: AppItem | null;
   onSelect: (app: AppItem) => void;
 }
 
 const AppSelector = ({ apps, currentApp, onSelect }: AppSelectorProps) => {
-  if (!apps.length) return null; // no integrations = no selector
-
+  if (!apps.length) return null; 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

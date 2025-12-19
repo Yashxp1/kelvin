@@ -1,7 +1,7 @@
 'use client';
 
 import { ExternalLink, FileText, Loader2 } from 'lucide-react';
-import { useGetHistory } from '@/hooks/History';
+import { useGetHistory, PromptHistoryItem } from '@/hooks/History';
 import { FaGithub } from 'react-icons/fa';
 import { RiNotionFill } from 'react-icons/ri';
 
@@ -84,7 +84,7 @@ const HistoryItem = ({
   item,
   formatDate,
 }: {
-  item: any;
+  item: PromptHistoryItem;
   formatDate: (d: string) => string;
 }) => {
   return (

@@ -20,7 +20,15 @@ const RepoSelector = ({
   onSelect,
   onClear,
 }: RepoSelectorProps) => {
-  const { data: repos, isLoading, error } = useGetRepos();
+  const { data, isLoading, error } = useGetRepos();
+
+  if (error) {
+    return (
+      <div className="text-xs text-red-500">Failed to load repositories</div>
+    );
+  }
+
+  const repos = data?.data ?? [];
 
   return (
     <div className="flex items-center gap-1">
@@ -33,13 +41,14 @@ const RepoSelector = ({
             </span>
           </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent align="start" className="w-64">
           {isLoading ? (
             <div className="flex justify-center p-4">
               <Spinner />
             </div>
-          ) : repos?.data && repos.data.length > 0 ? (
-            repos.data.map((repo) => (
+          ) : repos.length > 0 ? (
+            repos.map((repo) => (
               <DropdownMenuItem
                 key={repo.id}
                 onClick={() => onSelect(repo.name)}

@@ -26,6 +26,32 @@ import PromptHistory from './components/PromptHistory';
 import { cn } from '@/lib/utils';
 import { useIntegrations } from './components/useIntegration';
 import { apps } from '@/app/api/utils/items';
+
+const SubmitButton = ({
+  className,
+  onClick,
+  isLoading,
+}: {
+  className?: string;
+  onClick: () => void;
+  isLoading: boolean;
+}) => (
+  <button
+    onClick={onClick}
+    disabled={isLoading}
+    className={cn(
+      'flex items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition-all hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:hover:scale-100',
+      className
+    )}
+  >
+    {isLoading ? (
+      <Spinner className="text-current" />
+    ) : (
+      <ArrowRight size={16} />
+    )}
+  </button>
+);
+
 const Page = () => {
   const { mutate: generatePR, isPending: isPRPending } = useGeneratePR();
   const { mutate: summary, isPending: isSummaryPending } = useSummary();
@@ -50,10 +76,9 @@ const Page = () => {
     id: string;
     name: string;
   } | null>(null);
-  const [agentPrompt, setAgentPrompt] = useState('');
-  const [repoSummary, setAgentRepoSummary] = useState('');
-  const [notionSummary, setAgentNotionSummary] = useState('');
 
+  const [agentPrompt, setAgentPrompt] = useState('');
+  const [agentOutput, setAgentOutput] = useState('');
   const [showMobileOptions, setShowMobileOptions] = useState(false);
 
   const isLoadingAction =
@@ -73,6 +98,8 @@ const Page = () => {
 
     const GithubPayload = { repo: selectedTarget.name, prompt: agentPrompt };
 
+    setAgentOutput('');
+
     switch (currentAction.name) {
       case 'Pull-request':
         generatePR({
@@ -86,7 +113,7 @@ const Page = () => {
           onSuccess: (data) => {
             const text =
               data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-            setAgentRepoSummary(text);
+            setAgentOutput(text);
           },
         });
         break;
@@ -109,7 +136,7 @@ const Page = () => {
             onSuccess: (data) => {
               const text =
                 data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-              setAgentNotionSummary(text);
+              setAgentOutput(text);
             },
           }
         );
@@ -118,23 +145,6 @@ const Page = () => {
         toast.error('Action not recognized');
     }
   };
-
-  const SubmitButton = ({ className }: { className?: string }) => (
-    <button
-      onClick={handleAgentAction}
-      disabled={isLoadingAction}
-      className={cn(
-        'flex items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition-all hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:hover:scale-100',
-        className
-      )}
-    >
-      {isLoadingAction ? (
-        <Spinner className="text-current" />
-      ) : (
-        <ArrowRight size={16} />
-      )}
-    </button>
-  );
 
   return (
     <div className="flex w-full flex-col items-center rounded-t-lg bg-linear-to-b from-[#155DFC] to-transparent px-4 pb-10 pt-16 text-zinc-900 md:pt-24">
@@ -157,7 +167,7 @@ const Page = () => {
               value={agentPrompt}
               onChange={(e) => {
                 setAgentPrompt(e.target.value);
-                setAgentRepoSummary('');
+                setAgentOutput('');
               }}
               className="min-h-[120px] w-full resize-none bg-transparent text-base leading-relaxed placeholder:text-zinc-400 focus:outline-none"
               placeholder="Describe the task for the agent..."
@@ -180,7 +190,11 @@ const Page = () => {
                 )}
               </button>
 
-              <SubmitButton className="h-8 w-8 hover:scale-105" />
+              <SubmitButton
+                className="h-8 w-8 hover:scale-105"
+                onClick={handleAgentAction}
+                isLoading={isLoadingAction}
+              />
             </div>
             <div
               className={cn(
@@ -192,7 +206,9 @@ const Page = () => {
             >
               <div className="flex flex-wrap items-center gap-2">
                 <PromptHistory />
-                {/* <div className="hidden h-5 w-px bg-zinc-200 md:block" /> */}
+
+                <div className="h-4 w-px bg-zinc-200" />
+
                 {!connectionLoading && (
                   <AppSelector
                     apps={visibleApps}
@@ -233,7 +249,11 @@ const Page = () => {
 
                 <div className="hidden h-5 w-px bg-zinc-200 md:block" />
 
-                <SubmitButton className="hidden h-8 w-8 hover:scale-105 md:flex" />
+                <SubmitButton
+                  className="hidden h-8 w-8 hover:scale-105 md:flex"
+                  onClick={handleAgentAction}
+                  isLoading={isLoadingAction}
+                />
               </div>
             </div>
           </div>
@@ -241,7 +261,7 @@ const Page = () => {
 
         <AgentOutput
           prompt={agentPrompt}
-          summary={repoSummary || notionSummary}
+          summary={agentOutput}
           isPending={isSummaryPending || isNotionSummaryPending}
         />
       </div>

@@ -66,7 +66,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
               </DialogTrigger>
               <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle className="mb-2 flex items-center gap-2  text-sm text-zinc-500">
+                  <DialogTitle className="mb-2 flex items-center gap-2 text-sm text-zinc-500">
                     Prompt:
                     <span className="text-zinc-900">{prompt}</span>
                   </DialogTitle>
