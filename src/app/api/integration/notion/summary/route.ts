@@ -1,39 +1,59 @@
-import { withApiHandler } from '@/lib/api/apiHandler';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getNotionClient } from '@/lib/api/notion';
 import { Gemini } from '@/lib/api/gemini';
 import prisma from '@/lib/api/prisma';
+import { auth } from '@/lib/auth/auth';
+import {
+  BlockObjectResponse,
+  PartialBlockObjectResponse,
+  RichTextItemResponse,
+} from '@notionhq/client/build/src/api-endpoints';
 
-const summary = async (req: NextRequest, user: { id: string }) => {
-  const { prompt, pageId } = await req.json();
+export async function POST(req: NextRequest) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  const notion = await getNotionClient(user.id);
+    const { prompt, pageId } = (await req.json()) as {
+      prompt: string;
+      pageId: string;
+    };
 
-  const page = await notion.pages.retrieve({
-    page_id: pageId,
-  });
+    const notion = await getNotionClient(session.user.id);
 
-  const blocks = await notion.blocks.children.list({
-    block_id: pageId,
-  });
+    const page = await notion.pages.retrieve({
+      page_id: pageId,
+    });
 
-  const content = blocks.results
-    .map((block: any) => {
-      const richText = block[block.type]?.rich_text;
-      return richText?.map((t: any) => t.plain_text).join('') || '';
-    })
-    .join('\n');
+    const blocks = await notion.blocks.children.list({
+      block_id: pageId,
+    });
 
-  const pageUrl =
-    'url' in page ? page.url : `https://notion.so/${pageId.replace(/-/g, '')}`;
+    const content = blocks.results
+      .map((b) => {
+        const block = b as BlockObjectResponse | PartialBlockObjectResponse;
+        if (!('type' in block)) return '';
 
-  const res = {
-    id: page.id,
-    url: pageUrl,
-    content,
-  };
+        const blockContent = (
+          block as unknown as Record<
+            string,
+            { rich_text?: RichTextItemResponse[] }
+          >
+        )[block.type];
+        const richText = blockContent?.rich_text;
 
-  const aiPrompt = `
+        return richText?.map((t) => t.plain_text).join('') || '';
+      })
+      .join('\n');
+
+    const pageUrl =
+      'url' in page
+        ? page.url
+        : `https://notion.so/${pageId.replace(/-/g, '')}`;
+
+    const aiPrompt = `
   
                 You are an AI assistant that summarizes Notion page content.
 
@@ -65,22 +85,28 @@ const summary = async (req: NextRequest, user: { id: string }) => {
                 ${prompt}
 
                 Notion Page Content:
-               ${content}
+                ${content}
   `;
 
-  const summary = await Gemini(aiPrompt);
+    const aiResponse = await Gemini(aiPrompt);
 
-  await prisma.aI_Response.create({
-    data: {
-      provider: 'notion',
-      prompt,
-      responseData: summary?.data,
-      url: pageUrl,
-      userId: user.id,
-    },
-  });
+    await prisma.aI_Response.create({
+      data: {
+        provider: 'notion',
+        prompt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        responseData: aiResponse as any,
+        url: pageUrl,
+        userId: session.user.id,
+      },
+    });
 
-  return summary;
-};
-
-export const POST = withApiHandler(summary);
+    return NextResponse.json({ success: true, data: aiResponse });
+  } catch (error) {
+    console.error('Error in Notion summary:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}

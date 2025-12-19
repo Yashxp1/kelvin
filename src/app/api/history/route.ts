@@ -1,18 +1,30 @@
-import { withApiHandler } from '@/lib/api/apiHandler';
+import { NextResponse } from 'next/server';
+import { auth } from '@/lib/auth/auth';
 import prisma from '@/lib/api/prisma';
-import { NextRequest } from 'next/server';
 
-const getHistory = async (req: NextRequest, user: { id: string }) => {
-  const history = await prisma.aI_Response.findMany({
-    where: {
-      userId: user.id,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+export async function GET() {
+  try {
+    const session = await auth();
 
-  return history;
-};
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-export const GET = withApiHandler(getHistory);
+    const history = await prisma.aI_Response.findMany({
+      where: {
+        userId: session.user.id,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return NextResponse.json({ success: true, data: history });
+  } catch (error) {
+    console.error('Error fetching history:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}

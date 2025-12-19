@@ -69,6 +69,7 @@ export async function GET(req: NextRequest) {
       new URL('/dashboard?github=connected', req.url)
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }

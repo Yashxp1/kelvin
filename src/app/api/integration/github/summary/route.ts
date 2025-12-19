@@ -5,10 +5,15 @@ import prisma from '@/lib/api/prisma';
 
 type GithubUsername = {
   login: string;
-  [key: string]: any;
 };
 
-export async function POST(req: NextRequest, res: NextResponse) {
+type PullRequestType = {
+  number: number;
+  title: string;
+  body: string;
+};
+
+export async function POST(req: NextRequest) {
   try {
     const { prompt, repo, owner } = await req.json();
 
@@ -36,7 +41,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       `https://api.github.com/repos/${ghUser.login}/${repo}/pulls`
     );
 
-    const extracted = getPRs.data.map((pr: any) => ({
+    const extracted = getPRs.data.map((pr: PullRequestType) => ({
       number: pr.number,
       title: pr.title,
       body: pr.body,
@@ -45,7 +50,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const pullNumberMatch = prompt.match(/(\d+)/);
     const pullNumber = pullNumberMatch ? Number(pullNumberMatch[1]) : null;
 
-    const target = extracted.find((pr: any) => pr.number === pullNumber);
+    const target = extracted.find(
+      (pr: PullRequestType) => pr.number === pullNumber
+    );
 
     if (!target) {
       return NextResponse.json(
@@ -66,7 +73,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
         - PR number or Pull number: ${target.number}
         - PR Title: ${target.title}
         - PR Body: ${target.body}
-        - Diff: ${getPRs.data.find((pr: any) => pr.number === pullNumber)?.diff}
+        - Diff: ${
+          getPRs.data.find((pr: PullRequestType) => pr.number === pullNumber)
+            ?.diff
+        }
       
 
       `);
@@ -79,24 +89,23 @@ export async function POST(req: NextRequest, res: NextResponse) {
         data: {
           provider: 'github',
           prompt,
-          responseData: aiResponse.data || '',
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          responseData: (aiResponse as any) || '',
           url: `https://github.com/${ghUser.login}/${repo}/pull/${pullNumber}`,
           userId: owner,
         },
       });
 
-      console.log('AI Response ----------------------->', aiResponse.data);
-
-      return NextResponse.json({ success: true, data: aiResponse.data });
+      return NextResponse.json({ success: true, data: aiResponse });
     } catch (error) {
-      console.error('AI quota exceeded.');
+      console.error(error, 'AI quota exceeded.');
       return NextResponse.json(
         { error: 'AI quota exceeded. Try again later.' },
         { status: 429 }
       );
     }
-  } catch (err: any) {
-    console.error('Unexpected server error:', err);
+  } catch (error) {
+    console.error('Unexpected server error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -1,31 +1,51 @@
-import { withApiHandler } from '@/lib/api/apiHandler';
-import prisma from '@/lib/api/prisma';
+import { NextResponse } from 'next/server';
 import { Octokit } from 'octokit';
-import { NextRequest } from 'next/server';
+import prisma from '@/lib/api/prisma';
+import { auth } from '@/lib/auth/auth';
 
-const getRepos = async (req: NextRequest, user: { id: string }) => {
-  const integration = await prisma.integration.findFirst({
-    where: {
-      userId: user.id,
-      provider: 'github',
-    },
-  });
+export async function GET() {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  // if (!integration) {
-  //   throw new Error('Github not connected');
-  // }
+    const integration = await prisma.integration.findFirst({
+      where: {
+        userId: session.user.id,
+        provider: 'github',
+      },
+    });
 
-  const octokit = new Octokit({
-    auth: integration?.accessToken,
-  });
+    if (!integration) {
+      return NextResponse.json(
+        { error: 'GitHub integration not found' },
+        { status: 404 }
+      );
+    }
 
-  const repos = await octokit.rest.repos.listForAuthenticatedUser({
-    // per_page: 3,
-    sort: 'created',
-    ref: 'heads/main',
-  });
+    const octokit = new Octokit({
+      auth: integration.accessToken,
+    });
 
-  return repos.data;
-};
+    const { data } = await octokit.rest.repos.listForAuthenticatedUser({
+      sort: 'created',
+    });
 
-export const GET = withApiHandler(getRepos);
+    return NextResponse.json({
+      success: true,
+      data: data.map((repo) => ({
+        id: repo.id,
+        name: repo.name,
+        full_name: repo.full_name,
+        private: repo.private,
+      })),
+    });
+  } catch (error) {
+    console.error('Error fetching repositories:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
