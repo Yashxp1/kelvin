@@ -24,11 +24,19 @@ import AgentOutput from './components/AgentOutput';
 import { useCreateNotionPage, useNotionSummary } from '@/hooks/notion';
 import PromptHistory from './components/PromptHistory';
 import { cn } from '@/lib/utils';
+import { useIntegrations } from './components/useIntegration';
+import { apps } from '@/app/api/utils/items';
 const Page = () => {
   const { mutate: generatePR, isPending: isPRPending } = useGeneratePR();
   const { mutate: summary, isPending: isSummaryPending } = useSummary();
   const { mutate: issue, isPending: isIssuePending } = useIssue();
   const { mutate: searchRepo, isPending: isSearchPending } = useSearchRepo();
+
+  const { connected, loading: connectionLoading } = useIntegrations();
+
+  const visibleApps = connected
+    ? apps.filter((app) => connected[app.provider as keyof typeof connected])
+    : [];
 
   const { mutate: notionPage, isPending: isNotionSummaryPending } =
     useNotionSummary();
@@ -184,15 +192,19 @@ const Page = () => {
             >
               <div className="flex flex-wrap items-center gap-2">
                 <PromptHistory />
-                <div className="hidden h-5 w-px bg-zinc-200 md:block" />
-                <AppSelector
-                  currentApp={currentApp}
-                  onSelect={(app) => {
-                    setCurrentApp(app);
-                    setSelectedTarget(null);
-                    setCurrentAction(null);
-                  }}
-                />
+                {/* <div className="hidden h-5 w-px bg-zinc-200 md:block" /> */}
+                {!connectionLoading && (
+                  <AppSelector
+                    apps={visibleApps}
+                    currentApp={currentApp}
+                    onSelect={(app) => {
+                      setCurrentApp(app);
+                      setSelectedTarget(null);
+                      setCurrentAction(null);
+                    }}
+                  />
+                )}
+
                 {currentApp?.name === 'Github' ? (
                   <RepoSelector
                     selectedRepo={selectedTarget?.name || null}

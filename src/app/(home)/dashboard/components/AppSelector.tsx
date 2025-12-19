@@ -1,3 +1,5 @@
+'use client';
+
 import { AppItem } from '@/lib/types';
 import { PlusIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,40 +10,47 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { apps } from '@/app/api/utils/items';
 
 interface AppSelectorProps {
+  apps: AppItem[]; // already filtered (connected only)
   currentApp: AppItem | null;
   onSelect: (app: AppItem) => void;
 }
 
-const AppSelector = ({ currentApp, onSelect }: AppSelectorProps) => {
+const AppSelector = ({ apps, currentApp, onSelect }: AppSelectorProps) => {
+  if (!apps.length) return null; // no integrations = no selector
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" className="text-xs rounded-full border">
+        <Button
+          variant="secondary"
+          className="flex items-center gap-2 rounded-full border text-xs"
+        >
           {currentApp ? (
             <>
               <currentApp.icon size={15} />
-              <span className="text-xs ">{currentApp.name}</span>
+              <span>{currentApp.name}</span>
             </>
           ) : (
             <>
               <PlusIcon size={15} />
-              <span className="text-xs">Select App</span>
+              <span>Select App</span>
             </>
           )}
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="start" className="w-48">
-        <DropdownMenuLabel className="text-xs text-zinc-500 font-normal">
-          Integration
+        <DropdownMenuLabel className="text-xs font-normal text-zinc-500">
+          Integrations
         </DropdownMenuLabel>
-        {apps.map((app, idx) => (
+
+        {apps.map((app, id) => (
           <DropdownMenuItem
-            key={idx}
+            key={id}
             onClick={() => onSelect(app)}
-            className="gap-2 text-xs py-2 cursor-pointer"
+            className="flex cursor-pointer items-center gap-2 py-2 text-xs"
           >
             <app.icon size={15} />
             {app.name}

@@ -6,7 +6,12 @@ export async function GET() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ connected: {} });
+    return NextResponse.json({
+      connected: {
+        github: false,
+        notion: false,
+      },
+    });
   }
 
   const integrations = await prisma.integration.findMany({
@@ -22,7 +27,6 @@ export async function GET() {
   const connected = {
     github: integrations.some((i) => i.provider === 'github'),
     notion: integrations.some((i) => i.provider === 'notion'),
-    linear: integrations.some((i) => i.provider === 'linear'),
   };
 
   return NextResponse.json({ connected });
