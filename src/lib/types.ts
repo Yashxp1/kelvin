@@ -1,17 +1,15 @@
-//github-----------------
-
 import { LucideIcon } from 'lucide-react';
-
-export interface RepoResponse {
-  success: boolean;
-  data: Repo[];
-}
 
 export interface Repo {
   id: number;
   name: string;
   full_name: string;
   private: boolean;
+}
+
+export interface RepoResponse {
+  success: boolean;
+  data: Repo[];
 }
 
 export interface PullRequestResponse {

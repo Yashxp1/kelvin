@@ -12,7 +12,7 @@ const baseUrl = '/api/integration/github';
 
 export function useGetRepos() {
   return useQuery<RepoResponse>({
-    queryKey: ['repo'],
+    queryKey: ['repos'],
     queryFn: async () => {
       const res = await axios.get(`${baseUrl}/repo`);
       return res.data;

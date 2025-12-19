@@ -6,11 +6,11 @@ import { toast } from 'sonner';
 const baseUrl = '/api/integration/notion';
 
 export function useGetNotionPages() {
-  return useQuery<NotionPage[]>({
+  return useQuery<{ success: boolean; data: NotionPage[] }>({
     queryKey: ['notion-pages'],
     queryFn: async () => {
       const res = await axios.get(`${baseUrl}/get-pages`);
-      return res.data.data;
+      return res.data;
     },
   });
 }
