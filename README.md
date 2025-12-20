@@ -2,7 +2,8 @@
 
 Kelvin is an AI-powered workflow automation tool that helps developers interact with GitHub and Notion using natural language. It connects real developer tools with LLM-driven actions to reduce repetitive work and speed up everyday tasks.
 
-<img width="1919" height="873" alt="image" src="https://github.com/user-attachments/assets/e96d6a9b-a2ab-44b1-8b83-260fe17c3d0c" />
+<img width="1919" height="871" alt="image" src="https://github.com/user-attachments/assets/80683286-021c-4844-935d-e27a2feec8ae" />
+
 
 
 This project is actively under development and serves as a portfolio project demonstrating real-world full-stack engineering skills.
