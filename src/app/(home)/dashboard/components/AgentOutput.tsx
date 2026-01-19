@@ -1,7 +1,7 @@
-import { Copy, Maximize2 } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { Copy, Maximize2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,8 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface AgentOutputProps {
   prompt: string;
@@ -27,7 +27,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
     navigator.clipboard.writeText(summary);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
-    toast.success('Copied to clipboard');
+    toast.success("Copied to clipboard");
   };
 
   if (!summary && !isPending) {
@@ -35,7 +35,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
   }
 
   return (
-    <div className="group relative flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white text-sm shadow-sm transition-all hover:shadow-md">
+    <div className="group relative flex flex-col gap-2 rounded-xl border border-zinc-200 bg-[#F0EDED] text-sm shadow-sm transition-all hover:shadow-md">
       <div className="p-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-2 text-zinc-500">
@@ -110,7 +110,7 @@ const AgentOutput = ({ prompt, summary, isPending }: AgentOutputProps) => {
             </p>
 
             {summary.length > 200 && (
-              <div className="absolute bottom-0 left-0 right-0 h-6 bg-linear-to-t from-white to-transparent"></div>
+              <div className="absolute bottom-0 left-0 right-0 h-6 bg-linear-to-t from-[#F0EDED] to-transparent"></div>
             )}
           </div>
         )}

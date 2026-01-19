@@ -26,6 +26,7 @@ import PromptHistory from "./components/PromptHistory";
 import { cn } from "@/lib/utils";
 import { useIntegrations } from "./components/useIntegration";
 import { apps } from "@/app/api/utils/items";
+import { BlurIn } from "@/components/ui/blur-in";
 
 const SubmitButton = ({
   className,
@@ -40,7 +41,7 @@ const SubmitButton = ({
     onClick={onClick}
     disabled={isLoading}
     className={cn(
-      "flex items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition-all hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:hover:scale-100",
+      "flex items-center justify-center rounded-full bg-[#564F4B] text-white shadow-sm transition-all hover:bg-[#564F4B]/90 active:scale-95 disabled:opacity-50 disabled:hover:scale-100",
       className,
     )}
   >
@@ -147,19 +148,24 @@ const Page = () => {
   };
 
   return (
-    <div className="flex w-full flex-col items-center rounded-t-lg bg-linear-to-b from-[#155DFC] to-transparent px-4 pb-10 pt-16 text-zinc-900 md:pt-24">
+    <div
+      className="flex w-full flex-col items-center rounded-t-lg bg-linear-to-b from-[#F0EDED] to-transparent
+ px-4 pb-10 pt-16 text-zinc-900 md:pt-24"
+    >
       <div className="pointer-events-none fixed inset-0" />
 
       <div className="z-10 w-full max-w-3xl space-y-8">
-        <div className="mb-8 flex flex-col items-center space-y-2 text-center">
-          <h1 className="font-manrope text-3xl font-bold tracking-tight text-white md:text-5xl">
-            Kelvin.
-          </h1>
-          <p className="max-w-[80%] text-sm text-white/90 md:text-base">
-            Automate your workflow. Select a target, choose an action, and
-            execute.
-          </p>
-        </div>
+        <BlurIn>
+          <div className="mb-8 flex flex-col items-center space-y-2 text-center">
+            <h1 className="font-manrope text-3xl font-bold tracking-tight text-foreground md:text-5xl">
+              Kelvin.
+            </h1>
+            <p className="max-w-[80%] text-sm text-foreground/80 md:text-base">
+              Automate your workflow. Select a target, choose an action, and
+              execute.
+            </p>
+          </div>
+        </BlurIn>
 
         <div className="group relative rounded-2xl border border-zinc-200 bg-white shadow-md transition-all">
           <div className="p-4">

@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useGetHistory } from '@/hooks/History';
+import { useGetHistory } from "@/hooks/History";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { History } from 'lucide-react';
-import { RiNotionFill } from 'react-icons/ri';
-import { FaGithub } from 'react-icons/fa';
-import { useState } from 'react';
-import { RiHistoryFill } from 'react-icons/ri';
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { History } from "lucide-react";
+import { RiNotionFill } from "react-icons/ri";
+import { FaGithub } from "react-icons/fa";
+import { useState } from "react";
+import { RiHistoryFill } from "react-icons/ri";
 
 const PromptHistory = () => {
   const { data: history, isLoading } = useGetHistory();
@@ -28,15 +28,15 @@ const PromptHistory = () => {
   }) => (
     <div className="rounded-full bg-zinc-50 border px-3 py-2 text-xs font-medium text-card-foreground transition-colors hover:bg-muted/50 flex justify-between items-center">
       {text}
-      {provider === 'github' ? <FaGithub /> : <RiNotionFill />}
+      {provider === "github" ? <FaGithub /> : <RiNotionFill />}
     </div>
   );
 
-  if (isLoading) {
-    return (
-      <div className="h-34 w-full animate-pulse rounded-lg border bg-muted/20" />
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="h-34 w-full animate-pulse rounded-lg border bg-muted/20" />
+  //   );
+  // }
 
   if (!history || history.length === 0) {
     return null;

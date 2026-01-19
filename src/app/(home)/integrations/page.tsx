@@ -1,34 +1,34 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Spinner } from '@/components/ui/spinner';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { SiGithub, SiLinear, SiNotion } from 'react-icons/si';
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { SiGithub, SiLinear, SiNotion } from "react-icons/si";
 
 const Page = () => {
   const items = [
     {
-      title: 'Github',
-      description: 'Sync repositories and issues.',
-      provider: 'github',
-      url: '/api/integration/github',
+      title: "Github",
+      description: "Sync repositories and issues.",
+      provider: "github",
+      url: "/api/integration/github",
       icon: SiGithub,
       active: true,
     },
     {
-      title: 'Notion',
-      description: 'Connect workspaces and notes.',
-      provider: 'notion',
-      url: '/api/integration/notion',
+      title: "Notion",
+      description: "Connect workspaces and notes.",
+      provider: "notion",
+      url: "/api/integration/notion",
       icon: SiNotion,
       active: true,
     },
     {
-      title: 'Linear',
-      description: 'Streamline issue tracking.',
-      provider: 'linear',
-      url: '#',
+      title: "Linear",
+      description: "Streamline issue tracking.",
+      provider: "linear",
+      url: "#",
       icon: SiLinear,
       active: false,
     },
@@ -39,20 +39,20 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/integration/isConnected')
+    fetch("/api/integration/isConnected")
       .then((res) => res.json())
       .then((data) => {
         setConnected(data.connected || {});
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Failed to fetch integrations:', err);
+        console.error("Failed to fetch integrations:", err);
         setLoading(false);
       });
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-white p-8">
+    <div className="min-h-screen bg-[#F0EDED] w-full p-8">
       <div className="mx-auto max-w-4xl">
         <div className="mb-10">
           <h1 className="text-3xl font-semibold tracking-tight text-zinc-900">
@@ -75,8 +75,8 @@ const Page = () => {
                   group relative flex flex-col justify-between rounded-xl border p-6 transition-all duration-200
                   ${
                     isComingSoon
-                      ? 'border-dashed border-zinc-200 bg-zinc-50/50 opacity-70'
-                      : 'border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-sm'
+                      ? "border-dashed border-zinc-200 bg-zinc-50/50 opacity-70"
+                      : "border-zinc-200 bg-white hover:border-zinc-300 hover:shadow-sm"
                   }
                 `}
               >

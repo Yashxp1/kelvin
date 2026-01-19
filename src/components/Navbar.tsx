@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import {
   Dialog,
@@ -15,9 +15,9 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { LogoutAction } from '@/lib/auth/logout';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { LogoutAction } from "@/lib/auth/logout";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -38,10 +38,10 @@ const Navbar = () => {
           <Link
             href="/dashboard"
             className={cn(
-              'transition-colors hover:text-foreground/80',
-              pathname === '/dashboard'
-                ? 'text-foreground'
-                : 'text-foreground/60'
+              "transition-colors hover:text-foreground/80",
+              pathname === "/dashboard"
+                ? "text-foreground"
+                : "text-foreground/60",
             )}
           >
             Dashboard
@@ -50,10 +50,10 @@ const Navbar = () => {
           <Link
             href="/integrations"
             className={cn(
-              'transition-colors hover:text-foreground/80',
-              pathname === '/integrations'
-                ? 'text-foreground'
-                : 'text-foreground/60'
+              "transition-colors hover:text-foreground/80",
+              pathname === "/integrations"
+                ? "text-foreground"
+                : "text-foreground/60",
             )}
           >
             Integration
@@ -62,8 +62,10 @@ const Navbar = () => {
           <Link
             href="/history"
             className={cn(
-              'transition-colors hover:text-foreground/80',
-              pathname === '/history' ? 'text-foreground' : 'text-foreground/60'
+              "transition-colors hover:text-foreground/80",
+              pathname === "/history"
+                ? "text-foreground"
+                : "text-foreground/60",
             )}
           >
             History
@@ -94,10 +96,10 @@ const Navbar = () => {
               href="/dashboard"
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
-                'transition-colors hover:text-foreground',
-                pathname === '/dashboard'
-                  ? 'text-foreground'
-                  : 'text-foreground/60'
+                "transition-colors hover:text-foreground",
+                pathname === "/dashboard"
+                  ? "text-foreground"
+                  : "text-foreground/60",
               )}
             >
               Dashboard
@@ -107,10 +109,10 @@ const Navbar = () => {
               href="/integrations"
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
-                'transition-colors hover:text-foreground',
-                pathname === '/integrations'
-                  ? 'text-foreground'
-                  : 'text-foreground/60'
+                "transition-colors hover:text-foreground",
+                pathname === "/integrations"
+                  ? "text-foreground"
+                  : "text-foreground/60",
               )}
             >
               Integration
@@ -120,10 +122,10 @@ const Navbar = () => {
               href="/history"
               onClick={() => setIsMobileMenuOpen(false)}
               className={cn(
-                'transition-colors hover:text-foreground',
-                pathname === '/history'
-                  ? 'text-foreground'
-                  : 'text-foreground/60'
+                "transition-colors hover:text-foreground",
+                pathname === "/history"
+                  ? "text-foreground"
+                  : "text-foreground/60",
               )}
             >
               History
@@ -176,7 +178,7 @@ const Logo = () => {
     >
       <path
         d="M0 20C0 12.5231 0 8.78461 1.60769 6C2.66091 4.17577 4.17577 2.66091 6 1.60769C8.78461 0 12.5231 0 20 0C27.4769 0 31.2154 0 34 1.60769C35.8242 2.66091 37.3391 4.17577 38.3923 6C40 8.78461 40 12.5231 40 20C40 27.4769 40 31.2154 38.3923 34C37.3391 35.8242 35.8242 37.3391 34 38.3923C31.2154 40 27.4769 40 20 40C12.5231 40 8.78461 40 6 38.3923C4.17577 37.3391 2.66091 35.8242 1.60769 34C0 31.2154 0 27.4769 0 20Z"
-        fill="#2c84ffff"
+        fill="#564F4B"
       ></path>
       <path
         fillRule="evenodd"
