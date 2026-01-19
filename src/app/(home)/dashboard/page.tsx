@@ -1,31 +1,31 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   ArrowRight,
   SlidersHorizontal,
   ChevronDown,
   ChevronUp,
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { Spinner } from '@/components/ui/spinner';
+} from "lucide-react";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 import {
   useGeneratePR,
   useIssue,
   useSearchRepo,
   useSummary,
-} from '@/hooks/Github';
-import { ActionItem, AppItem } from '@/lib/types';
-import AppSelector from './components/AppSelector';
-import RepoSelector from './components/RepoSelector';
-import GetPages from './components/GetPages';
-import ActionSelector from './components/ActionSelector';
-import AgentOutput from './components/AgentOutput';
-import { useCreateNotionPage, useNotionSummary } from '@/hooks/notion';
-import PromptHistory from './components/PromptHistory';
-import { cn } from '@/lib/utils';
-import { useIntegrations } from './components/useIntegration';
-import { apps } from '@/app/api/utils/items';
+} from "@/hooks/Github";
+import { ActionItem, AppItem } from "@/lib/types";
+import AppSelector from "./components/AppSelector";
+import RepoSelector from "./components/RepoSelector";
+import GetPages from "./components/GetPages";
+import ActionSelector from "./components/ActionSelector";
+import AgentOutput from "./components/AgentOutput";
+import { useCreateNotionPage, useNotionSummary } from "@/hooks/notion";
+import PromptHistory from "./components/PromptHistory";
+import { cn } from "@/lib/utils";
+import { useIntegrations } from "./components/useIntegration";
+import { apps } from "@/app/api/utils/items";
 
 const SubmitButton = ({
   className,
@@ -40,8 +40,8 @@ const SubmitButton = ({
     onClick={onClick}
     disabled={isLoading}
     className={cn(
-      'flex items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition-all hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:hover:scale-100',
-      className
+      "flex items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition-all hover:bg-blue-500 active:scale-95 disabled:opacity-50 disabled:hover:scale-100",
+      className,
     )}
   >
     {isLoading ? (
@@ -77,8 +77,8 @@ const Page = () => {
     name: string;
   } | null>(null);
 
-  const [agentPrompt, setAgentPrompt] = useState('');
-  const [agentOutput, setAgentOutput] = useState('');
+  const [agentPrompt, setAgentPrompt] = useState("");
+  const [agentOutput, setAgentOutput] = useState("");
   const [showMobileOptions, setShowMobileOptions] = useState(false);
 
   const isLoadingAction =
@@ -90,59 +90,59 @@ const Page = () => {
     isNotionPageCreatePending;
 
   const handleAgentAction = () => {
-    if (!currentApp) return toast.error('Select an app');
+    if (!currentApp) return toast.error("Select an app");
     if (!selectedTarget)
-      return toast.error('Select a target (Repository or Page)');
-    if (!currentAction) return toast.error('Select an action');
-    if (!agentPrompt.trim()) return toast.error('Prompt cannot be empty');
+      return toast.error("Select a target (Repository or Page)");
+    if (!currentAction) return toast.error("Select an action");
+    if (!agentPrompt.trim()) return toast.error("Prompt cannot be empty");
 
     const GithubPayload = { repo: selectedTarget.name, prompt: agentPrompt };
 
-    setAgentOutput('');
+    setAgentOutput("");
 
     switch (currentAction.name) {
-      case 'Pull-request':
+      case "Pull-request":
         generatePR({
-          owner: 'Yashxp1',
+          owner: "Yashxp1",
           repo: selectedTarget.name,
           prompt: agentPrompt,
         });
         break;
-      case 'Review':
+      case "Review":
         summary(GithubPayload, {
           onSuccess: (data) => {
             const text =
-              data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+              data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
             setAgentOutput(text);
           },
         });
         break;
-      case 'Create-issue':
+      case "Create-issue":
         issue(GithubPayload);
         break;
-      case 'Update-file':
+      case "Update-file":
         searchRepo(GithubPayload);
         break;
-      case 'Create-page':
+      case "Create-page":
         notionPageCreate({
           prompt: agentPrompt,
         });
         break;
-      case 'Update-page':
-      case 'Summarise':
+      case "Update-page":
+      case "Summarise":
         notionPage(
           { pageId: selectedTarget.id, prompt: agentPrompt },
           {
             onSuccess: (data) => {
               const text =
-                data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+                data?.data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
               setAgentOutput(text);
             },
-          }
+          },
         );
         break;
       default:
-        toast.error('Action not recognized');
+        toast.error("Action not recognized");
     }
   };
 
@@ -167,7 +167,7 @@ const Page = () => {
               value={agentPrompt}
               onChange={(e) => {
                 setAgentPrompt(e.target.value);
-                setAgentOutput('');
+                setAgentOutput("");
               }}
               className="min-h-[120px] w-full resize-none bg-transparent text-base leading-relaxed placeholder:text-zinc-400 focus:outline-none"
               placeholder="Describe the task for the agent..."
@@ -182,7 +182,7 @@ const Page = () => {
                 className="flex items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-200/50"
               >
                 <SlidersHorizontal size={14} />
-                {showMobileOptions ? 'Hide Options' : 'Configure Agent'}
+                {showMobileOptions ? "Hide Options" : "Configure Agent"}
                 {showMobileOptions ? (
                   <ChevronUp size={14} />
                 ) : (
@@ -198,10 +198,10 @@ const Page = () => {
             </div>
             <div
               className={cn(
-                'md:flex md:flex-row md:items-center md:justify-between md:gap-0',
+                "md:flex md:flex-row md:items-center md:justify-between md:gap-0",
                 showMobileOptions
-                  ? 'mt-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2'
-                  : 'hidden'
+                  ? "mt-4 flex flex-col gap-3 animate-in fade-in slide-in-from-top-2"
+                  : "hidden",
               )}
             >
               <div className="flex flex-wrap items-center gap-2">
@@ -221,7 +221,7 @@ const Page = () => {
                   />
                 )}
 
-                {currentApp?.name === 'Github' ? (
+                {currentApp?.name === "Github" ? (
                   <RepoSelector
                     selectedRepo={selectedTarget?.name || null}
                     onSelect={(name) => setSelectedTarget({ id: name, name })}
